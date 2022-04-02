@@ -1,0 +1,34 @@
+{
+  "token": "OTI2NTA3ODQzMzUwMzMxNDYy.Yc8rqw.rZuacdL-VvDtWo1sFIXjFGjCZ7I",
+  "prefix": ["."],
+  "guildID": "878576843454812210",
+  "sunucuadı":"GALAXY",
+  "mongoUrl": "mongodb+srv://AlgosNkoa:AlgosNkoa@cluster0.ms4gv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "owners": ["920580155938840626"],
+  "botDurum": "Mehmet Bey ❤️ Hasovski ❤️ ✶ GALAXY",
+  "botSes": "878576846508265472",
+  "registerPerm": "",
+
+  "dmMessages": true,
+
+  "messageDolar": 5,
+  "voiceDolar": 10,
+
+
+  "messageCount": 2,
+  "messageCoin": 2,
+  "voiceCount": 4,
+  "voiceCoin": 4,
+  "publicCoin": 7,
+  "inviteCount": 15,
+  "inviteCoin": 15,
+  "taggedCoin": 25,
+  "toplamsCoin": 5.5,
+  "yetkiCoin": 30,
+
+  "banlimit": 3,
+  "jaillimit": 7,
+  "warnlimit": 10,
+  "chatmutelimit": 10,
+  "voicemutelimit": 10
+}

@@ -1,0 +1,17 @@
+{
+  "name": "welcome",
+  "version": "0.0.1",
+  "description": "",
+  "main": "shera.js",
+  "scripts": {
+    "test": "node shera.js"
+  },
+  "author": "shera",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/opus": "^0.5.3",
+    "discord.js": "^12.5.3",
+    "ffmpeg": "^0.0.4",
+    "opusscript": "^0.0.8"
+  }
+}
