@@ -1,12 +1,11 @@
-const { acar, Mongo } = require('./Moderation.Client');
-const { Websocket } = require('./Global.Webinterface');
-const client = global.client = new acar({ fetchAllMembers: true})
-
-let WEB_INTERFACE = (new Websocket("4939", client))
-
-client.fetchCommands()
-client.fetchEvents()
+const { acar, Mongo } = require('./Global.Client');
+const { Stat, Monthly } = require('./Stat.Autoclean');
+const client = global.client = new acar({ fetchAllMembers: true })
 
 Mongo.Connect();
+client.fetchEvents();
+Stat.Clean();
+Monthly.System();
 
-client.login(sistem.MODTOKEN);
+client.login(sistem.STATTOKEN);
+
