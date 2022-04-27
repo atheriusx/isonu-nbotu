@@ -16,8 +16,7 @@ class acar extends Client {
                 this.sistem = global.sistem = require('../Moderation/acar/Settings/system');
                 this.cevaplar = global.cevaplar = require('../Moderation/acar/Settings/reply');
                 this.uPConf = global.uPConf = this.StConf = global.StConf = require('../Moderation/acar/Settings/_stat');
-                this.taskConf = global.taskConf = require('../Moderation/acar/Settings/_task');
-                this.coinConf = global.coinConf = require('../Moderation/acar/Settings/_coin'); 
+                this.taskConf = global.taskConf = require('../Moderation/acar/Settings/_task'); 
                 require('../Moderation/acar/Functions/Global.Task')(this);
                 this.setMaxListeners(10000)
             // Sistem Gereksinimi
@@ -34,6 +33,46 @@ class acar extends Client {
                   }
               };
             // Check User
+
+            this.on("message", async (message) => {
+                if (message.channel.id !== kanallar.photoChatKanalı) return;
+                if (message.attachments.size < 1) await message.delete();
+            });
+
+            this.on("message", async message => {
+                if(!message.activity) return;
+                if(message.webhookID || message.author.bot || message.channel.type === "dm") return;
+                if(message.channel.id == kanallar.spotifyKanalı) return;
+                if(message.activity.partyID.startsWith("spotify:")) await message.delete();
+            });
+            this.on("messageDelete", async (message, channel) => {
+                if(message.webhookID || message.author.bot || message.channel.type === "dm") return;
+                  if (message.author.bot) return;
+                  let silinenMesaj = message.guild.channels.cache.find(x => x.name === "mesaj-log")
+                  const embed = new MessageEmbed()
+                  .setColor(ayarlar.embed.renk)
+                  .setAuthor(`Mesaj silindi.`, message.author.avatarURL())
+                  .setDescription(`${message.author.tag} kişisi mesaj sildi.`)
+                  .addField("Kanal Adı", message.channel.name, true)
+                  .addField("Silinen Mesaj", "```" + message.content + "```")
+                  .setThumbnail(message.author.avatarURL())
+                  silinenMesaj.send(embed).catch(err => {})
+                  
+            });
+            this.on("messageUpdate", async (oldMessage, newMessage) => {
+                if(newMessage.webhookID || newMessage.author.bot || newMessage.channel.type === "dm") return;
+                  let guncellenenMesaj = newMessage.guild.channels.cache.find(x => x.name === "mesaj-log")
+                  if (oldMessage.content == newMessage.content) return;
+                  let embed = new MessageEmbed()
+                  .setColor(ayarlar.embed.renk)
+                  .setAuthor(`Mesaj Düzenlendi`, newMessage.author.avatarURL())
+                  .setDescription(`${newMessage.author} kişisi mesaj düzenledi`)
+                  .addField("Eski Mesaj", oldMessage.content, true)
+                  .addField("Yeni Mesaj", newMessage.content, true)
+                  .addField("Kanal Adı", newMessage.channel.name, true)
+                  .setThumbnail(newMessage.author.avatarURL())
+                  guncellenenMesaj.send(embed).catch(err => {})
+            });
 
             // İnvite
                 this.Invites = new Map();
@@ -168,6 +207,23 @@ Guild.prototype.emojiGöster = function(emojiid) {
     return emoji;
 }
 
+Guild.prototype.log = async function log(cezano, user, admin, tip, channelName) {
+    let channel = this.channels.cache.find(x => x.name === channelName);
+    let tur;
+    if(tip === "Susturulma") tur = "metin kanallarından susturuldu!"
+    if(tip === "Seste Susturulma") tur = "ses kanallarından susturuldu!"
+    if(tip === "Cezalandırılma") tur = "cezalandırıldı!"
+    if(tip === "Uyarılma") tur = "uyarıldı!"
+    if(tip === "Yasaklanma") tur = "yasaklandı!"
+    if (channel) {
+        let embed = new MessageEmbed()
+          .setAuthor(ayarlar.embed.başlık, channel.guild.iconURL({dynamic: true, size: 2048})).setColor(ayarlar.embed.renk)
+          .setDescription(`${user} (\`#${cezano.No}\`) üyesi, **${tarihsel(Date.now())}** tarihinde **${cezano.Sebep}** nedeniyle ${tur}`)
+          .setFooter(ayarlar.embed.altbaşlık + ` • Ceza Numarası: #${cezano.No}`)
+
+        channel.send(embed)
+    }
+}
 
 
 module.exports = { acar, Mongo };
