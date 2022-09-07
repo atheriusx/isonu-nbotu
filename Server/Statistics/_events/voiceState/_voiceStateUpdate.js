@@ -99,7 +99,7 @@ if (!statRecods.has(oldState.id)) {
 module.exports.config = {
     Event: "voiceStateUpdate"
 } 
-client.acarSaatYap = (date) => { return moment.duration(date).format('H'); };
+client.sehiraSaatYap = (date) => { return moment.duration(date).format('H'); };
 function getDuraction(ms) {
     return Date.now() - ms;
   };
@@ -171,7 +171,7 @@ function getDuraction(ms) {
       }
 
       if(!data2.Mission.CompletedAllVoice) {
-        if(Number(client.acarSaatYap(genelses)) >= MissionData.AllVoice) {
+        if(Number(client.sehiraSaatYap(genelses)) >= MissionData.AllVoice) {
           if(MissionData.AllVoice <= 0) return; 
           if(görevLog) görevLog.send({embeds: [logEmbed.setDescription(`${uye} isimli görev sahibi, **Genel Ses** görevini ${tarihsel(Date.now())} tarihinden tamamlayarak \`${MissionData.Reward ? MissionData.Reward  : uPConf.points.tasks}  Görev Puanı\` kazandı.`)]})
           await Users.updateOne({_id: uye.id}, {$inc: {"Coin": MissionData.Reward ? MissionData.Reward  : uPConf.points.tasks}}, {upsert: true})
@@ -189,7 +189,7 @@ function getDuraction(ms) {
       }
 
       if(!data2.Mission.CompletedPublicVoice) {
-        if(Number(client.acarSaatYap(public)) >= MissionData.publicVoice) {
+        if(Number(client.sehiraSaatYap(public)) >= MissionData.publicVoice) {
           if(MissionData.public <= 0) return; 
           if(görevLog) görevLog.send({embeds: [logEmbed.setDescription(`${uye} isimli görev sahibi, **Public, Register, Streamer** görevini ${tarihsel(Date.now())} tarihinden tamamlayarak \`${MissionData.Reward ? MissionData.Reward  : uPConf.points.tasks}  Görev Puanı\` kazandı.`)]})
           await Users.updateOne({_id: uye.id}, {$inc: {"Coin": MissionData.Reward ? MissionData.Reward  : uPConf.points.tasks}}, {upsert: true})

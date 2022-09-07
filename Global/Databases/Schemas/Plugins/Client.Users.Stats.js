@@ -11,7 +11,8 @@ const schema = mongoose.model('Stat', new mongoose.Schema({
     totalVoiceStats: {type: Number, default: 0},
     chatStats: {type: Map, default: new Map()},
     upstaffChatStats: {type: Map, default: new Map()},
-    totalChatStats: {type: Number, default: 0}
+    totalChatStats: {type: Number, default: 0},
+
 }));
 
 module.exports = schema;
