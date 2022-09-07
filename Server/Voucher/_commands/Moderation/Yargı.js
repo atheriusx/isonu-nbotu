@@ -5,9 +5,9 @@ const { genEmbed } = require('../../../../Global/Init/Embed');
 const getLimit = new Map();
 
 module.exports = {
-    Isim: "ban",
-    Komut: ["yargı", "yasakla", "sg", "ananısikerim"],
-    Kullanim: "ban <@acar/ID> <Sebep>",
+    Isim: "yargı",
+    Komut: ["yargı"],
+    Kullanim: "yargı <@sehira/ID> <Sebep>",
     Aciklama: "Belirlenen üyeyi sunucudan uzaklaştırır.",
     Kategori: "yetkili",
     Extend: true,
@@ -26,11 +26,11 @@ module.exports = {
    */
 
   onRequest: async function (client, message, args) {
-    if(!ayarlar && !roller && !roller.banHammer || !roller.üstYönetimRolleri || !roller.yönetimRolleri || !roller.kurucuRolleri || !roller.altYönetimRolleri) return message.channel.send(cevaplar.notSetup)
-    if(!roller.banHammer.some(oku => message.member.roles.cache.has(oku)) && !roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !message.member.permissions.has('ADMINISTRATOR')) return message.channel.send(cevaplar.noyt);
+    if(!roller.kurucuRolleri) return message.channel.send(cevaplar.notSetup)
+    if(!roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !message.member.permissions.has('ADMINISTRATOR')) return message.channel.send(cevaplar.noyt);
     let uye = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || await client.getUser(args[0])
     let sunucudabul = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@acar/ID> <Sebep>\``);
+    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@sehira/ID> <Sebep>\``);
     if(message.author.id === uye.id) return message.channel.send(cevaplar.kendi);
     if(sunucudabul && sunucudabul.user.bot) return message.channel.send(cevaplar.bot);
     if(sunucudabul && message.member.roles.highest.position <= sunucudabul.roles.highest.position) return message.channel.send(cevaplar.yetkiust);
@@ -54,6 +54,7 @@ module.exports = {
             Date: Date.now()
         })
         ceza.save().catch(err => {})
+        uye.send(`Merhaba ${uye}, **${ayarlar.serverName}** sunucusun'dan  ${message.member} adlı yetkili tarafından \`${sebep}\` nedeni ile yasaklandınız.`)
         let findedChannel = message.guild.kanalBul("ban-log")
         if(findedChannel) findedChannel.send({embeds: [new genEmbed().setFooter(`${message.guild.name ? `${message.guild.name} •` : ''} Ceza Numarası: #${cezano}`,message.guild.name ? message.guild.iconURL({dynamic: true}) : uye.avatarURL({dynamic: true})).setDescription(`${uye.toString()} üyesine, **${tarihsel(Date.now())}** tarihinde \`${sebep}\` nedeniyle ${message.member} tarafından ceza-i işlem uygulandı.`)]})
         await message.channel.send(`${message.guild.emojiGöster(emojiler.Yasaklandı)} ${uye.toString()} isimli üyeye \`${sebep}\` sebebiyle "__Yasaklama__" türünde ceza-i işlem uygulandı. (\`Ceza Numarası: #${cezano}\`)`)

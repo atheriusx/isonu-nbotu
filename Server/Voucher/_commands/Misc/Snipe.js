@@ -40,13 +40,13 @@ module.exports = {
     let mesajYazari = await client.users.fetch(mesaj.yazar);
     let embed = new genEmbed().setDescription(`\`Atan Kişi:\` ${mesajYazari} \n\`Yazılma Tarihi:\` ${moment.duration(Date.now() - mesaj.yazilmaTarihi).format("D [gün], H [saat], m [dakika], s [saniye]")} önce\n\`Silinme Tarihi:\` ${moment.duration(Date.now() - mesaj.silinmeTarihi).format("D [gün], H [saat], m [dakika], s [saniye]")} önce ${mesaj.dosya ? "\n**Atılan mesaj dosya içeriyor**" : ""}`).setAuthor(mesajYazari.tag, mesajYazari.avatarURL())
     if (mesaj.icerik) embed.addField('Mesajın İçeriği', mesaj.icerik);
-    let acardörtbin;
-    if (mesaj.icerik) acardörtbin = mesaj.icerik
+    let sehiradörtbin;
+    if (mesaj.icerik) sehiradörtbin = mesaj.icerik
     message.channel.send({embeds: [embed]}).then(x => setTimeout(() => {
         x.delete()
     }, 15000)).catch(err => { 
       message.channel.send({content: `${message.guild.emojiGöster(emojiler.chatMuteKaldırıldı)} ${message.guild.members.cache.get(mesaj.yazar)} (\`${moment.duration(Date.now() - mesaj.yazilmaTarihi).format("D [gün], H [saat], m [dakika], s [saniye]")} önce yazılma / ${moment.duration(Date.now() - mesaj.silinmeTarihi).format("D [gün], H [saat], m [dakika], s [saniye]")} önce silinme\`) üyesi karakter sayısını aşan bir metin gönderdiği için **Discord API** buna izin vermedi, bende senin için dosya hazırladım.`, files: [{
-          attachment: Buffer.from(acardörtbin),
+          attachment: Buffer.from(sehiradörtbin),
           name: `${mesaj.yazar}-snipe.txt`
       }]})
     });

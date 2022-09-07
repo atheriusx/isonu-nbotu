@@ -1,4 +1,4 @@
-const {MessageEmbed} = require("discord.js");
+const { Client, Message, MessageButton, MessageEmbed, MessageAttachment, MessageActionRow } = require("discord.js");
 const Stats = require('../../../../Global/Databases/Schemas/Plugins/Client.Users.Stats')
 const moment = require('moment');
 require('moment-duration-format');
@@ -26,6 +26,7 @@ module.exports = {
 
   onRequest: async function (client, message, args) {
      const embed = new genEmbed()
+     
     Stats.find({guildID: message.guild.id}).exec((err, data) => {
         data = data.filter(m => message.guild.members.cache.has(m.userID));
         let genelsesbirinci;

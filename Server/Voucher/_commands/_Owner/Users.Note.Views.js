@@ -5,7 +5,7 @@ const Users = require('../../../../Global/Databases/Schemas/Client.Users');
 module.exports = {
     Isim: "notlar",
     Komut: ["not-listele","notes"],
-    Kullanim: "notlar <@acar/ID>",
+    Kullanim: "notlar <@sehira/ID>",
     Aciklama: "",
     Kategori: "kurucu",
     Extend: true,

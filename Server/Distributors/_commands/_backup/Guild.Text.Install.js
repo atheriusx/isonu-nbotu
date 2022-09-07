@@ -6,7 +6,7 @@ const VoiceChannels = require("../../../../Global/Databases/Schemas/Guards/Backu
 module.exports = {
     Isim: "metinkur",
     Komut: ["metinkur"],
-    Kullanim: "kategorikur @acar/ID",
+    Kullanim: "kategorikur @sehira/ID",
     Aciklama: "Sunucudaki üyeler içerisinde tagı olmayanları kayıtsıza at.",
     Kategori: "-",
     Extend: false,

@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageAttachment} = require("discord.js");
+const { Client, Message, MessageButton, MessageEmbed, MessageAttachment, MessageActionRow, MessageSelectMenu } = require("discord.js");
 const Canvas = require("canvas");
 const Stats = require('../../../../Global/Databases/Schemas/Plugins/Client.Users.Stats')
 const Upstaff = require('../../../../Global/Databases/Schemas/Plugins/Client.Users.Staffs');
@@ -10,7 +10,7 @@ require('moment-timezone');
 module.exports = {
     Isim: "stat",
     Komut: ["stat","seslerim","mesajlarım"],
-    Kullanim: "stat <@acar/ID>",
+    Kullanim: "stat <@sehira/ID>",
     Aciklama: "Belirlenen üye veya kendinizin istatistik bilgilerine bakarsınız",
     Kategori: "stat",
     Extend: true,
@@ -44,7 +44,24 @@ module.exports = {
     let kullArray = message.content.split(" ");
     let kullaniciId = kullArray.slice(1);
     let uye = message.mentions.members.first() || message.guild.members.cache.get(kullaniciId[0]) || message.guild.members.cache.find(x => x.user.username.toLowerCase() === kullaniciId.slice(0).join(" ") || x.user.username === kullaniciId[0]) || message.member;
-      Stats.findOne({ guildID: message.guild.id, userID: uye.id }, async (err, data) => {
+    let menü = new MessageActionRow().addComponents(
+      new MessageSelectMenu()
+      .setCustomId("menü")
+      .setPlaceholder(`${uye.user.tag}'nin detaylarını görüntüle`)
+      .addOptions( 
+        { label: "Top 20", description: "Sunucuda ki sıralamalarını gösterir.", value: "top", emoji: { "name": "chatMute", "id": "962112364944191499" }},
+        { label: "Top İnvite", description: "Sunucuda ki sıralamalarını gösterir.", value: "invite", emoji: { "name": "chatMute", "id": "962112364944191499" }},
+        { label: "Top Görev", description: "Sunucuda ki sıralamalarını gösterir.", value: "görev", emoji: { "name": "chatMute", "id": "962112364944191499" }},
+        { label: "Top Teyit", description: "Sunucuda ki sıralamalarını gösterir.", value: "teyit", emoji: { "name": "chatMute", "id": "962112364944191499" }},
+        { label: "Top Yetkili", description: "Sunucuda ki sıralamalarını gösterir.", value: "yetkili", emoji: { "name": "chatMute", "id": "962112364944191499" }},
+        { label: "Top Coin", description: "Sunucuda ki sıralamalarını gösterir.", value: "coin", emoji: { "name": "chatMute", "id": "962112364944191499" }},
+        { label: "Profil", description: "Profil menüsüne döner.", value: "profil", emoji: { "name": "chatMute", "id": "962112364944191499" }},
+        { label: "İptal", description: "", value: "iptal", emoji: { "name": "chatMute", "id": "947548354756370472" }},
+
+      )
+    )
+    
+    Stats.findOne({ guildID: message.guild.id, userID: uye.id }, async (err, data) => {
         let Upstaffs = await Upstaff.findOne({_id: uye.id})
         if (!data) return message.reply({content: `${message.guild.emojiGöster(emojiler.Iptal)} \`${message.guild.name}\` sunucuna ait bir istatistik verisi bulunamadı.`, ephemeral: true})
         let haftalikSesToplam = 0;
@@ -145,6 +162,10 @@ module.exports = {
             }
           }
         }
+
+
+
+
         if(ayarlar && !ayarlar.statRozet) embed.setThumbnail(uye.user.avatarURL({dynamic: true, size: 2048}))
         if(Upstaffs && Upstaffs.Görev) embed.setFooter(uye.user.tag + ` ${Upstaffs.Görev} Görev Puanı Bulunmakta!`, uye.user.avatarURL({dynamic: true, size: 2048}))
         if(args[0] == "kart") {
@@ -225,18 +246,93 @@ module.exports = {
           ctx.closePath();
         }
           
-          const attachment = new MessageAttachment(canvas.toBuffer(), 'acar.png');
+          const attachment = new MessageAttachment(canvas.toBuffer(), 'sehira.png');
           message.react(message.guild.emojiGöster(emojiler.Onay))
           return message.reply({ content: `:tada: Aşağıda ${message.member.id == uye.id ? `**${message.guild.name}** sunucusuna ait sesli sohbet bilgi kartın görüntüleniyor.` : `${uye} isimli üyenin **${message.guild.name}** sunucusuna ait sesli sohbet bilgi kartı görüntüleniyor.`}`, files: [attachment]})
         } 
-        message.channel.send({embeds: [embed
+        
+        
+        
+        let msg = await message.channel.send({embeds: [embed
             .setAuthor(uye.user.tag, uye.user.avatarURL({dynamic: true, size: 2048}))
             .setDescription(`${uye} (${uye.roles.highest}) üyesinin \`${message.guild.name}\` sunucusunda haftalık ses ve mesaj bilgileri aşağıda belirtilmiştir.`)
             .addField(`${message.guild.emojiGöster(emojiler.voiceDeaf)} Ses Sıralaması`,`${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Toplam: \`${client.sureCevir(haftalikSesToplam)}\`
 ${haftalikSesListe ? haftalikSesListe ? haftalikSesListe : haftalikSesListe : `${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Ses istatistiği bulunamadı.`}`, ayarlar.statRozet )                        
   .addField(`${message.guild.emojiGöster(emojiler.chatMuteKaldırıldı)} Mesaj Sıralaması`,`${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Toplam: \`${haftalikChatToplam}\`
-${haftalikChatListe ? haftalikChatListe ? haftalikChatListe : haftalikChatListe : `${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Mesaj istatistiği bulunamadı.`}`, ayarlar.statRozet)]}
+${haftalikChatListe ? haftalikChatListe ? haftalikChatListe : haftalikChatListe : `${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Mesaj istatistiği bulunamadı.`}`, ayarlar.statRozet)], components: [menü]}
           );
+          const filter = i => i.user.id == message.member.id 
+          const collector = msg.createMessageComponentCollector({ filter, time: 25000 });
+          // top stat
+          collector.on('collect', async i => {
+            if (i.values[0] === `top`) {
+              msg.delete().catch(err => {})
+               let kom = client.commands.find(x => x.Isim == "top")
+                            kom.onRequest(client, message, args)
+                            i.deferUpdate()
+            }
+          })
+          // invite
+          collector.on('collect', async i => {
+            if (i.values[0] === `invite`) {
+              msg.delete().catch(err => {})
+               let kom = client.commands.find(x => x.Isim == "topdavet")
+                            kom.onRequest(client, message, args)
+                            i.deferUpdate()
+            }
+          })
+          // profil
+          collector.on('collect', async i => {
+            if (i.values[0] === `profil`) {
+              msg.delete().catch(err => {})
+               let kom = client.commands.find(x => x.Isim == "profil")
+                            kom.onRequest(client, message, args)
+                            i.deferUpdate()
+            }
+          })
+          // görev
+          collector.on('collect', async i => {
+            if (i.values[0] === `görev`) {
+              msg.delete().catch(err => {})
+               let kom = client.commands.find(x => x.Isim == "topgörev")
+                            kom.onRequest(client, message, args)
+                            i.deferUpdate()
+            }
+          })
+          // teyit
+          collector.on('collect', async i => {
+            if (i.values[0] === `teyit`) {
+              msg.delete().catch(err => {})
+               let kom = client.commands.find(x => x.Isim == "topteyit")
+                            kom.onRequest(client, message, args)
+                            i.deferUpdate()
+            }
+          })
+          //yetkili
+          collector.on('collect', async i => {
+            if (i.values[0] === `yetkili`) {
+              msg.delete().catch(err => {})
+               let kom = client.commands.find(x => x.Isim == "topyetkili")
+                            kom.onRequest(client, message, args)
+                            i.deferUpdate()
+            }
+          })
+          // iptal
+          collector.on('collect', async i => {
+            if (i.values[0] === `iptal`) {
+              msg.delete().catch(err => {})
+            }
+          })
+          // coin
+          collector.on('collect', async i => {
+            if (i.values[0] === `coin`) {
+              msg.delete().catch(err => {})
+               let kom = client.commands.find(x => x.Isim == "topcoin")
+                            kom.onRequest(client, message, args)
+                            i.deferUpdate()
+            }
+          })
+
        });
   }
 };

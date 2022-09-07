@@ -28,7 +28,7 @@ module.exports = {
     const hasEmoteRegex = /<a?:.+:\d+>/gm
     const emoteRegex = /<:.+:(\d+)>/gm
     const animatedEmoteRegex = /<a:.+:(\d+)>/gm
-    const isim = `${ayarlar.serverName ? ayarlar.serverName : 'acar'}_${Math.round((Math.random()*9999))}`
+    const isim = `${ayarlar.serverName ? ayarlar.serverName : 'sehira'}_${Math.round((Math.random()*9999))}`
     const message = msg.content.match(hasEmoteRegex)
       if (emoji = emoteRegex.exec(message)) return EmojiYükle("https://cdn.discordapp.com/emojis/" + emoji[1] + ".png?v=1", isim, msg)
       else 

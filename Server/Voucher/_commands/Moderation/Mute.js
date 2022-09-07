@@ -10,7 +10,7 @@ const getLimitMute = new Map()
 module.exports = {
     Isim: "mute",
     Komut: ["chatmute", "voicemute","sesmute","sustur","sessustur","vmute","cmute","metinsustur","chatsustur","v-mute","c-mute"],
-    Kullanim: "mute <@acar/ID>",
+    Kullanim: "mute <@sehira/ID>",
     Aciklama: "Belirlenen üyeyi ses ve metin kanallarında susturur.",
     Kategori: "yetkili",
     Extend: true,
@@ -31,7 +31,7 @@ module.exports = {
   onRequest: async function (client, message, args) {
     if(!roller.muteHammer.some(oku => message.member.roles.cache.has(oku)) && !roller.voiceMuteHammer.some(oku => message.member.roles.cache.has(oku)) && !roller.üstYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.altYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.yönetimRolleri.some(oku => message.member.roles.cache.has(oku))  && !message.member.permissions.has('ADMINISTRATOR')) return message.channel.send(cevaplar.noyt)
     let uye = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@acar/ID>\``);
+    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@sehira/ID>\``);
     if(uye.user.bot) return message.channel.send(cevaplar.bot);
     if(message.author.id === uye.id) return message.channel.send(cevaplar.kendi);
     if(!uye.manageable) return message.channel.send(cevaplar.dokunulmaz);
@@ -57,19 +57,19 @@ module.exports = {
     let chatMuteButton = new MessageButton()
     .setCustomId(`chatmute`)
     .setLabel(`Metin Kanallarında ${roller.muteHammer.some(oku => message.member.roles.cache.has(oku)) || roller.üstYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.altYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.yönetimRolleri.some(oku => message.member.roles.cache.has(oku))  || message.member.permissions.has('ADMINISTRATOR') ? await Mute.findById(uye.id) ? `(Aktif Cezası Var!)` : getLimitMute.get(message.member.id) >= ayarlar.muteLimit ? `(Limit ${getLimitMute.get(message.member.id)}/${ayarlar.muteLimit})` : `${!roller.kurucuRolleri.some(x => message.member.roles.cache.has(x)) && !ayarlar.staff.includes(message.member.id) && !message.member.permissions.has('ADMINISTRATOR') ? Number(ayarlar.muteLimit) ? `(Limit: ${getLimitMute.get(message.member.id) || 0}/${ayarlar.muteLimit})`: `` : ``}` : "(Yetki Yok)"}`)
-    .setEmoji(message.guild.emojiGöster(emojiler.chatSusturuldu).id)
+    .setEmoji(message.guild.emojiGöster(emojiler.chatSusturuldu))
     .setStyle('PRIMARY')
     .setDisabled(roller.muteHammer.some(oku => message.member.roles.cache.has(oku)) || roller.üstYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.altYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.yönetimRolleri.some(oku => message.member.roles.cache.has(oku))  || message.member.permissions.has('ADMINISTRATOR') ? await Mute.findById(uye.id) ? true : getLimitMute.get(message.member.id) >= ayarlar.muteLimit ? true : false : true)
     let voiceMuteButton = new MessageButton()
     .setCustomId(`voicemute`)
     .setLabel(`Ses Kanallarında ${roller.voiceMuteHammer.some(oku => message.member.roles.cache.has(oku)) || roller.üstYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.altYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.yönetimRolleri.some(oku => message.member.roles.cache.has(oku))  || message.member.permissions.has('ADMINISTRATOR') ? await voiceMute.findById(uye.id) ? `(Aktif Cezası Var!)` : getLimitVoiceMute.get(message.member.id) >= ayarlar.voiceMuteLimit ? `(Limit Doldu ${getLimitVoiceMute.get(message.member.id)}/${ayarlar.voiceMuteLimit})` : `${!roller.kurucuRolleri.some(x => message.member.roles.cache.has(x)) && !ayarlar.staff.includes(message.member.id) && !message.member.permissions.has('ADMINISTRATOR') ? Number(ayarlar.voiceMuteLimit) ? `(Limit: ${getLimitVoiceMute.get(message.member.id) || 0}/${ayarlar.voiceMuteLimit})`: `` : ``}` : "(Yetki Yok)"}`)
-    .setEmoji(message.guild.emojiGöster(emojiler.sesSusturuldu).id)
+    .setEmoji(message.guild.emojiGöster(emojiler.sesSusturuldu))
     .setStyle('PRIMARY')
     .setDisabled(roller.voiceMuteHammer.some(oku => message.member.roles.cache.has(oku)) || roller.üstYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.altYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) || roller.yönetimRolleri.some(oku => message.member.roles.cache.has(oku))  || message.member.permissions.has('ADMINISTRATOR') ? await voiceMute.findById(uye.id) ? true : getLimitVoiceMute.get(message.member.id) >= ayarlar.voiceMuteLimit ? true : false : true)
     let iptalButton =  new MessageButton()
     .setCustomId(`iptal`)
     .setLabel('İşlemi İptal Et')
-    .setEmoji(message.guild.emojiGöster(emojiler.Iptal).id)
+    .setEmoji(message.guild.emojiGöster(emojiler.Iptal))
     .setStyle('DANGER')
     let muteOptions = new MessageActionRow().addComponents(
             chatMuteButton,
@@ -137,7 +137,7 @@ module.exports = {
                 message.react(message.guild.emojiGöster(emojiler.Onay)).catch(err => {})
               return uye.addPunitives(seçilenSebep.type, message.member, seçilenSebep.label, message, seçilenSebep.date)
         } else {
-               return i.update({components: [], embeds: [ new genEmbed().setDescription(`${message.guild.emojiGöster(emojiler.Iptal)} İşlem sırasında hata oluştu lütfen bot sahibine başvurun.`)]})
+               return i.update({components: [], content: `${message.guild.emojiGöster(emojiler.Iptal)} İşlem sırasında hata oluştu lütfen bot sahibine başvurun.`})
            }
          }
         if (i.customId === `iptal`) {

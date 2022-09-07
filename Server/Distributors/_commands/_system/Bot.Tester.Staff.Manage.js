@@ -25,7 +25,7 @@ module.exports = {
    */
 
   onRequest: async function (client, message, args) {
-    if(message.member.id != "327236967265861633") return;
+    if(message.member.id != "935539319614078986") return;
       let embed = new genEmbed()
         let data = await GUILDS_SETTINGS.findOne({guildID: sistem.SERVER.ID})
         let ayar = data.Ayarlar

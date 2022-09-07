@@ -9,7 +9,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "yetki",
     Komut: ["yetkilianaliz","upstaff","staff"],
-    Kullanim: "yetki <@acar/ID>",
+    Kullanim: "yetki <@sehira/ID>",
     Aciklama: "Belirlenen yetkilinin sunucu içerisinde ki bilgileri gösterir ve yükseltir düşürür.",
     Kategori: "stat",
     Extend: true,
@@ -94,6 +94,10 @@ module.exports = {
   .setLabel('⏬ Düşürme' + ` ${Upstaffs ? '' : '(Yetki Seçilmeli)'}`)
   .setDisabled(Upstaffs ? false : true)
   .setStyle('SECONDARY')
+  let button5 = new MessageButton()
+  .setCustomId('puanveraq')
+  .setLabel('Paun Ver/Al')
+  .setStyle('SECONDARY')
   let button4 = new MessageButton()
   .setCustomId('bilgilendirme')
   .setLabel('❗ Bilgilendirme')
@@ -101,7 +105,7 @@ module.exports = {
   let button3 = new MessageButton()
   .setCustomId('buttoniptal')
   .setLabel('Kapat')
-  .setEmoji(message.guild.emojiGöster(emojiler.Iptal).id)
+  .setEmoji(message.guild.emojiGöster(emojiler.Iptal))
   .setStyle('DANGER')
   
   let rolMenu =  new MessageSelectMenu()
@@ -170,8 +174,8 @@ let collector = await msg.createMessageComponentCollector({filter, errors: ["tim
     collector.on("collect", async (button) => {
       if(button.customId === "bilgilendirme") {
         button.reply({embeds: [new genEmbed().setDescription(`Aşağıda belirtilen (\`Yükselt/Düşür\`) işlemlerini yapmak artık çok basit tek tık düğme ile anında yükseltme ve düşürme işlemi yapılabilmektedir fakat komut severler için ekstra olarak komutlarımız vardır.\n
-\` YÜKSELTME \` **${sistem.botSettings.Prefixs[0]}yükselt <@acar/ID>**
-\` DÜŞÜRME \` **${sistem.botSettings.Prefixs[0]}düşür <@acar/ID>**
+\` YÜKSELTME \` **${sistem.botSettings.Prefixs[0]}yükselt <@sehira/ID>**
+\` DÜŞÜRME \` **${sistem.botSettings.Prefixs[0]}düşür <@sehira/ID>**
 
 komutları kullanılabilir veyada listeden vermek istenilen yetki anında üzerine alt yetkileri ile verilmektedir bu yetkileri websitesi üzerinden sadece taç sahibi ayarlayabilir.`)], ephemeral: true})
       }

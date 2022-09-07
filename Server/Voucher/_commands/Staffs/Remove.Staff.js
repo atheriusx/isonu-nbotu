@@ -5,7 +5,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "yetkiçek",
     Komut: ["yçek","ytçek","yetkicek","ycek"],
-    Kullanim: "yetkiçek <@acar/ID>",
+    Kullanim: "yetkiçek <@sehira/ID>",
     Aciklama: "Belirlenen üyeyi komutu kullanan üyenin taglısı olarak belirler.",
     Kategori: "kurucu",
     Extend: true,
@@ -27,7 +27,7 @@ module.exports = {
     let embed = new genEmbed()
     if(!roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !message.member.permissions.has('ADMINISTRATOR')) return message.channel.send(cevaplar.noyt);
     let uye = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@acar/ID>\``);
+    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@sehira/ID>\``);
     if(message.author.id === uye.id) return message.channel.send(cevaplar.kendi);
     let kontrol = await Users.findOne({_id: uye.id}) || { Staff: false}
     if(kontrol && !kontrol.Staff) return message.channel.send(`${cevaplar.prefix} ${uye}, isimli üye yetkili olarak tanımlı değil!`);

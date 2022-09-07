@@ -9,7 +9,7 @@ const VoiceChannels = require("../../../../Global/Databases/Schemas/Guards/Backu
 module.exports = {
     Isim: "rolkur",
     Komut: ["kur"],
-    Kullanim: "rol @acar/ID",
+    Kullanim: "rol @sehira/ID",
     Aciklama: "Sunucudaki üyeler içerisinde tagı olmayanları kayıtsıza at.",
     Kategori: "-",
     Extend: false,

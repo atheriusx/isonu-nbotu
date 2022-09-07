@@ -57,15 +57,6 @@ client.on("voiceStateUpdate", async (oldState, newState) => {
             }
         }
     }
-    if (oldState.channelId && newState.channelId) {
-        if (newState.channel && newState.channel.name.includes("+18")) {
-            if(ageLimit < 18) {
-                await logKanali.send({content: `${newState.member}`, embeds: [embed.setDescription(`${newState.member} üyesi **18 yaşından** küçük olmasına rağmen +18 kanallara giriş yaptığından dolayı \`${newState.channel.name}\` isimli kanaldan atıldı!`)]})
-                await newState.member.send(`${newState.member} **18 yaşından** küçük olduğun için \`${newState.channel.name}\` isimli kanaldan atıldın!`).catch(e => { });
-                await newState.member.voice.disconnect().catch(e => { });
-            }
-        }
-    }
 }
 
 

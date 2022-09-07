@@ -4,7 +4,7 @@ const Invite = require('../../../../Global/Databases/Schemas/Global.Guild.Invite
 module.exports = {
     Isim: "invite",
     Komut: ["davet","davetlerim"],
-    Kullanim: "invite <@acar/ID>",
+    Kullanim: "invite <@sehira/ID>",
     Aciklama: "Belirtilen üye veya komutu kullanan üyenin davet bilgilerini görüntüler.",
     Kategori: "stat",
     Extend: true,

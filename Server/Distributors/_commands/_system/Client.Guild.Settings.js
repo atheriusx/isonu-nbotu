@@ -11,6 +11,7 @@ let özellikler = [
     { name: "kufurEngel", type: "acmali" , category: "guild"},
     { name: "reklamEngel", type: "acmali" , category: "guild"},
     { name: "kayıtsızLimit", type: "tekil", category: "limit"},
+    { name: "botSesKanal", type: "kanal", category: "channel"},
     { name: "muteLimit", type: "tekil", category: "limit"},
     { name: "voiceMuteLimit", type: "tekil", category: "limit"},
     { name: "jailLimit", type: "tekil", category: "limit"},
@@ -38,6 +39,7 @@ let özellikler = [
     { name: "jailRolü", type: "rol" , category: "punitives"},
     { name: "şüpheliRolü", type: "rol", category: "punitives" },
     { name: "yasaklıTagRolü", type: "rol" , category: "punitives"},
+    { name: "underworldRolü", type: "rol" , category: "punitives"},
     { name: "Katıldı", type: "rol" , category: "guild"},
     { name: "banKoru", type: "roller" , category: "role"},
     { name: "Yetkiler", type: "roller" , category: "role"},
@@ -57,6 +59,7 @@ let özellikler = [
     { name: "streamerKategorisi", type: "kanal" , category: "channel"},
     { name: "photoChatKanalı", type: "kanal", category: "channel" },
     { name: "spotifyKanalı", type: "kanal", category: "channel" },
+    { name: "sıralamaKanalı", type: "kanal", category: "channel" },
     { name: "sleepRoom", type: "kanal", category: "channel" },
     { name: "ayrıkKanallar", type: "kanallar" , category: "channel"},
     { name: "başlangıçYetki", type: "rol", category: "role"},
@@ -67,6 +70,7 @@ let özellikler = [
     { name: "statRozetThree", type: "rol", category: "stat"},
     { name: "statRozetFour", type: "rol", category: "stat"},
     { name: "statRozetFive", type: "rol", category: "stat"},
+    { name: "teyitZorunlu", type: "acmali", category: "stat"},
 
  // Tekil, Rol, Kanal, Roller, Acmali, Cogul
   ];
@@ -95,39 +99,28 @@ const { genEmbed } = require('../../../../Global/Init/Embed');
   
     onRequest: async function (client, message, args) {
       if(!(ayarlar && ayarlar.staff && ayarlar.staff.includes(message.member.id)) && message.guild.ownerId != message.member.id) return message.channel.send(cevaplar.noyt)
-      const buttonSatir = new MessageActionRow().addComponents(
-        new MessageButton()
-        .setCustomId("restleaq")
-        .setLabel("Tüm Botları Yeniden Başlat")
-        .setStyle("SECONDARY")
-        .setEmoji("927196659056791602"),
-        new MessageButton()
-        .setCustomId("seçenekkur")
-        .setLabel("Rol Alma & Seçenek Kurulumu")
-        .setStyle("SECONDARY")
-        .setEmoji("812726381417857074"),
-        new MessageButton()
-        .setCustomId("logkur")
-        .setLabel("Log Kanal Kurulumu")
-        .setStyle("SECONDARY")
-        .setEmoji("925127916382220379"),
-        new MessageButton()
-        .setCustomId("emojikur")
-        .setLabel("Emojileri Yükleme")
-        .setStyle("SECONDARY")
-        .setEmoji("927315417146458113"),
 
-      )
-      const buttonSatir3 = new MessageActionRow()
-      .addComponents(
-        new MessageButton()
-        .setCustomId('ayarlistesi')
-        .setLabel('⚡ Ayarlanabilir Genel Ayarlar')
-        .setStyle("PRIMARY"),
-        new MessageButton()
-        .setCustomId('ayarlar')
-        .setLabel('🔨 Yapılan Ayarları Görüntüle')
-        .setStyle('SUCCESS')
+
+
+      const buttonSatir = new MessageActionRow().addComponents(
+        new MessageSelectMenu()
+        .setCustomId("setup")
+        .setPlaceholder("🎄 Ayarlar")
+        .addOptions(
+          { label: "Botları Yeniden Başlat", description: "Tüm botları yeniden başlatır.", value: "restleaq", emoji: { "name": "chatMute", "id": "949921900589617182" }},
+          { label: "Bot Düzenleme", description: "Botların isim, pp ve hakkımdasını değiştirebilirsiniz.", value: "botguncelle", emoji: { "name": "chatMute", "id": "925127916382220379" }},
+          { label: "Yedekleme", description: "Sunucunun anlık olarak tüm verilerini yedekler.", value: "yedekleoç", emoji: { "name": "chatMute", "id": "927315417146458113" }},
+          { label: "Rol & Seçenek Kur", description: "Rol alma ve seçenek'lerin kurulumunu yapabilirsiniz.", value: "seçenekkur", emoji: { "name": "chatMute", "id": "957570687474745375" }},
+          { label: "Log Kur", description: "Botun ihtiyacı olan log kanallarını kurar.", value: "logkur", emoji: { "name": "chatMute", "id": "957570687474745375" }},
+          { label: "Emojileri Kur", description: "Botun ihtiyacı olan emojileri kurar.", value: "emojikur", emoji: { "name": "chatMute", "id": "957570687474745375" }},
+          { label: "Ayarlar Listesi", description: "Yapılabilen ayarların listesini atar.", value: "ayarlistesi", emoji: { "name": "chatMute", "id": "955374236422250546" }},
+          { label: "Ayarlar", description: "Yapılan ayarları listeler.", value: "ayarlar", emoji: { "name": "chatMute", "id": "943285490617032755" }},
+          { label: "Rol Kurulum", description: "Rol alma menüsü için gerekli olan tüm rolleri kurar.", value: "seçenekrol", emoji: { "name": "chatMute", "id": "961172255642112051" }},
+          { label: "Yasaklı Tag", description: "Sunucunuz'a yasaklı tag ekleyebilir veya kaldırabilirsiniz.", value: "yasaktag", emoji: { "name": "chatMute", "id": "943291954756714558" }},
+
+
+
+        )
       )
        
         let Database = await GUILD_SETTINGS.findOne({guildID: message.guild.id}).exec()
@@ -135,34 +128,64 @@ const { genEmbed } = require('../../../../Global/Init/Embed');
         let secim = args[0];
         const embed = new genEmbed() .setColor("WHITE")   
         if (!secim || !özellikler.some(ozellik => ozellik.name.toLowerCase() == secim.toLowerCase())) {
-            return message.channel.send({embeds: [embed.setDescription(`🛠 \`${message.guild.name}\` sunucusunun, Bot, Sunucu, Lisans , Veritabanı ve ayarlanabilir ayarlarını buradan güncelleyebilir düzeltebilirsiniz ayrıca lisans, üyelik ve paket işlemlerini ister buradan ister de websitesi kontrolü üzerinden yapabilirsiniz.`)], components: [buttonSatir,buttonSatir3]}).then(x => {
+            return message.channel.send({embeds: [embed.setDescription(`${message.guild.emojiGöster("943286195406925855")} \`${message.guild.name}\` Sunucusunun Yönetim Paneline Hoş Geldiniz. \n Bu menüden botunuzun tüm ayarlarını gerçekleştirebilirsiniz.  \n Bot profili, sunucu ayarları,  yedekleme işlemi, emojiler, log kanalları ve daha bir sürü işlemi bu menü üzerinden hızlıca ve kolayca gerçekleştirebilirsiniz. \n
+            ${message.guild.emojiGöster(emojiler.uyari)} **Hatırlatma** \n> Menülere tepki verilmediği takdirde 30 saniye içinde mesaj otomatik olarak silinmektedir.
+            `)], components: [buttonSatir]}).then(x => {
                 const filter = i =>  i.user.id === message.member.id;
 
                 const collector = message.channel.createMessageComponentCollector({ filter, time: 35000 });
                 
                 collector.on('collect', async i => {
-                  if(i.customId === 'emojikur') {
+                  if(i.values[0] === 'emojikur') {
                     await i.reply({content: `${message.guild.emojiGöster(emojiler.Onay)} Başarıyla istek gönderildi! komutu bu paneli açmadan kullanmak için: **${sistem.botSettings.Prefixs[0]}emojikur** komutu ile kullanabilirsiniz.`, ephemeral: true})
                     message.react(message.guild.emojiGöster(emojiler.Onay))
                     x.delete().catch(err => {})
                     let kom = client.commands.find(x => x.Isim == "emojikur")
                     kom.onRequest(client, message, args)
                   }
-                  if(i.customId === 'logkur') {
+                  if(i.values[0] === 'botguncelle') {
+                    await i.reply({content: `${message.guild.emojiGöster(emojiler.Onay)} Başarıyla istek gönderildi! komutu bu paneli açmadan kullanmak için: **${sistem.botSettings.Prefixs[0]}bot** komutu ile kullanabilirsiniz.`, ephemeral: true})
+                    message.react(message.guild.emojiGöster(emojiler.Onay))
+                    x.delete().catch(err => {})
+                    let kom = client.commands.find(x => x.Isim == "bot")
+                    kom.onRequest(client, message, args)
+                  }
+                  if(i.values[0] === 'yedekleoç') {
+                    await i.reply({content: `${message.guild.emojiGöster(emojiler.Onay)} Başarıyla istek gönderildi! komutu bu paneli açmadan kullanmak için: **${sistem.botSettings.Prefixs[0]}backup** komutu ile kullanabilirsiniz.`, ephemeral: true})
+                    message.react(message.guild.emojiGöster(emojiler.Onay))
+                    x.delete().catch(err => {})
+                    let kom = client.commands.find(x => x.Isim == "backup")
+                    kom.onRequest(client, message, args)
+                  }
+                  if(i.values[0] === 'logkur') {
                     await i.reply({content: `${message.guild.emojiGöster(emojiler.Onay)} Başarıyla istek gönderildi! komutu bu paneli açmadan kullanmak için: **${sistem.botSettings.Prefixs[0]}logkur** komutu ile kullanabilirsiniz.`, ephemeral: true})
                     message.react(message.guild.emojiGöster(emojiler.Onay))
                     x.delete().catch(err => {})
                     let kom = client.commands.find(x => x.Isim == "logkur")
                     kom.onRequest(client, message, args)
                   }
-                  if(i.customId == "seçenekkur") {
+                  if(i.values[0] === 'seçenekrol') {
+                    await i.reply({content: `${message.guild.emojiGöster(emojiler.Onay)} Başarıyla istek gönderildi! komutu bu paneli açmadan kullanmak için: **${sistem.botSettings.Prefixs[0]}seçenekrol** komutu ile kullanabilirsiniz.`, ephemeral: true})
+                    message.react(message.guild.emojiGöster(emojiler.Onay))
+                    x.delete().catch(err => {})
+                    let kom = client.commands.find(x => x.Isim == "seçenekrol")
+                    kom.onRequest(client, message, args)
+                  }
+                  if(i.values[0] === 'yasaktag') {
+                    await i.reply({content: `${message.guild.emojiGöster(emojiler.Onay)} Başarıyla istek gönderildi! komutu bu paneli açmadan kullanmak için: **${sistem.botSettings.Prefixs[0]}yasaktag** komutu ile kullanabilirsiniz.`, ephemeral: true})
+                    message.react(message.guild.emojiGöster(emojiler.Onay))
+                    x.delete().catch(err => {})
+                    let kom = client.commands.find(x => x.Isim == "yasak-tag")
+                    kom.onRequest(client, message, args)
+                  }
+                  if(i.values[0] == "seçenekkur") {
                     await i.reply({content: `${message.guild.emojiGöster(emojiler.Onay)} Başarıyla istek gönderildi! komutu bu paneli açmadan kullanmak için: **${sistem.botSettings.Prefixs[0]}seçenek** komutu ile kullanabilirsiniz.`, ephemeral: true})
                     message.react(message.guild.emojiGöster(emojiler.Onay))
                     x.delete().catch(err => {})
                     let kom = client.commands.find(x => x.Isim == "seçenek")
                     kom.onRequest(client, message, args)
                   }
-                  if(i.customId == "restleaq") {
+                  if(i.values[0] == "restleaq") {
                     const children = require("child_process");
                     message.react(message.guild.emojiGöster(emojiler.Onay)),
                     x.delete().catch(err => {})
@@ -172,13 +195,13 @@ const { genEmbed } = require('../../../../Global/Init/Embed');
                     });
   
                   }
-                  if(i.customId === "ayarlistesi") {
+                  if(i.values[0] === "ayarlistesi") {
                     await i.reply({content: `\` ••❯ \` **Değiştirilmek isteyen ayar nasıl değiştirilir?** \`${sistem.botSettings.Prefixs[0]}setup <@ayarismi> <Yeni Ayar İçeriği>\`
 \` ••❯ \` **Sunucunun tag veya ismi nasıl değiştirilir?** \`${sistem.botSettings.Prefixs[0]}datareplace <@Tag/SunucuIsmi> <YeniTag/YeniSunucuIsmi>\`
 
 \` ••❯ \` **${message.guild.name} Sunucusuna Ait Ayarlanabilir Özellikler** (\`${özellikler.length} adet bulunmaktadır.\`): ${özellikler.map(o => `${o.name}`).join(", ")}`, ephemeral: true}), message.react(message.guild.emojiGöster(emojiler.Onay)), x.delete().catch(err => {})
                   }
-                    if (i.customId === 'ayarlar') {
+                    if (i.values[0] === 'ayarlar') {
                       let sunucu = Object.keys(data || {}).filter(a => özellikler.find(v => v.name == a && v.category == "guild")).map(o => {
                         let element = data[o];
                         let ozellik = özellikler.find(z => z.name == o);
@@ -277,62 +300,34 @@ const { genEmbed } = require('../../../../Global/Init/Embed');
                       }).join('\n');
                       await i.reply({content: 'Başarıyla! Tüm sunucu içinde yapılan ayarları aşağıda ki düğmelerden seçerek listeleyebilirsiniz.', ephemeral: true});
                       let Rows = new MessageActionRow().addComponents(
-                        new MessageButton()
-                        .setCustomId("ayarlar_tum")
-                        .setLabel("Tüm Ayarları Görüntüle")
-                        .setStyle("DANGER")
-                        .setEmoji("925127916537413692"),
-                        new MessageButton()
-                        .setCustomId("ayarlar_sunucu")
-                        .setLabel("Genel Sunucu Ayarları")
-                        .setStyle("PRIMARY")
-                        .setEmoji("925128101774647296"),
-                        new MessageButton()
-                        .setCustomId("ayarlar_role")
-                        .setLabel("Rol Ayarları")
-                        .setStyle("PRIMARY")
-                        .setEmoji("927297098272083988"),
-                        new MessageButton()
-                        .setCustomId("ayarlar_channel")
-                        .setLabel("Kanal Ayarları")
-                        .setStyle("PRIMARY")
-                        .setEmoji("927297745071534140"),
-                        new MessageButton()
-                        .setCustomId("ayarlar_punitives")
-                        .setLabel("Cezalandırma Ayarları")
-                        .setStyle("PRIMARY")
-                        .setEmoji("927297796317540392"),
-                      )
-                      let RowsTWO = new MessageActionRow().addComponents(
-                        new MessageButton()
-                        .setCustomId("ayarlar_register")
-                        .setLabel("Teyit Ayarları")
-                        .setStyle("SECONDARY")
-                        .setEmoji("927298179467198464"),
-                        new MessageButton()
-                        .setCustomId("ayarlar_limit")
-                        .setLabel("Limit Ayarları")
-                        .setStyle("SECONDARY")
-                        .setEmoji("927298481046052985"),
-                        new MessageButton()
-                        .setCustomId("ayarlar_stat")
-                        .setLabel("Diğer Ayarlar")
-                        .setStyle("SECONDARY")
-                        .setEmoji("925128103741775892"),
-                      )
+                        new MessageSelectMenu()
+        .setCustomId("ayarlar")
+        .setPlaceholder("🎆 Ayarlar")
+        .addOptions(
+          { label: "Tüm Ayarları Görüntüle", description: "Sunucuda yapılan tüm ayarları gösterir.", value: "ayarlar_tum", emoji: { "name": "chatMute", "id": "962112243661688942" }},
+          { label: "Genel Sunucu Ayarları", description: "Genel sunucu ayarlarını gösterir.", value: "ayarlar_sunucu", emoji: { "name": "chatMute", "id": "962112243661688942" }},
+          { label: "Rol Ayarları", description: "Sunucuda ki rol ayarlarını gösterir.", value: "ayarlar_role", emoji: { "name": "chatMute", "id": "962112243661688942" }},
+          { label: "Kanal Ayarları", description: "Sunucuda ki kanal ayarlarını gösterir.", value: "ayarlar_channel", emoji: { "name": "chatMute", "id": "962112243661688942" }},
+          { label: "Cezalandırma Ayarları", description: "Sunucuda ki cezalandırma ayarlarını gösterir.", value: "ayarlar_punitives", emoji: { "name": "chatMute", "id": "962112243661688942" }},
+          { label: "Teyit Ayarları", description: "Sunucuda ki teyit ayarlarını gösterir.", value: "ayarlar_register", emoji: { "name": "chatMute", "id": "962112243661688942" }},
+          { label: "Limit Ayarları", description: "Sunucu da ki guard limit ayarlarını gösterir.", value: "ayarlar_limit", emoji: { "name": "chatMute", "id": "962112243661688942" }},
+          { label: "Diğer Ayarlar", description: "Diğer ayarları gösterir.", value: "ayarlar_stat", emoji: { "name": "chatMute", "id": "962112243661688942" }},
+
+        )
+  )
                       x.delete().catch(err => {})
-                      let ayarlist = await message.channel.send({embeds: [new genEmbed().setColor("WHITE").setDescription(`:tada: Aşağıda ki ayarlar kategorisinden hangi yapılan ayar listesini görüntülemek istediğini seçerek görüntüleyebilirsiniz.`)], components: [Rows, RowsTWO]}).then(msg => {
-                        const filter = i =>  i.user.id === message.member.id && (i.customId == "ayarlar_sunucu" 
-|| i.customId == "ayarlar_tum" 
-|| i.customId == "ayarlar_register" 
-|| i.customId == "ayarlar_limit"
-|| i.customId == "ayarlar_role"
-|| i.customId == "ayarlar_punitives"
-|| i.customId == "ayarlar_channel"
-|| i.customId == "ayarlar_stat" )
+                      let ayarlist = await message.channel.send({embeds: [new genEmbed().setColor("WHITE").setDescription(`:tada: Aşağıda ki ayarlar kategorisinden hangi yapılan ayar listesini görüntülemek istediğini seçerek görüntüleyebilirsiniz.`)], components: [Rows]}).then(msg => {
+                        const filter = i =>  i.user.id === message.member.id && (i.values[0] == "ayarlar_sunucu" 
+|| i.values[0] == "ayarlar_tum" 
+|| i.values[0] == "ayarlar_register" 
+|| i.values[0] == "ayarlar_limit"
+|| i.values[0] == "ayarlar_role"
+|| i.values[0] == "ayarlar_punitives"
+|| i.values[0] == "ayarlar_channel"
+|| i.values[0] == "ayarlar_stat" )
                         const collector = message.channel.createMessageComponentCollector({ filter, time: 60000 });
                         collector.on('collect', async (i) => {
-if(i.customId == "ayarlar_tum") {
+if(i.values[0] == "ayarlar_tum") {
   await i.reply({content: "Aşağı da listelenmekte olan tüm sunucu ayarları görüntülenmektedir.", ephemeral: true})
 
 const arr = Discord.Util.splitMessage(`
@@ -347,37 +342,37 @@ for (const newText of arr) {
 }
 
 
-                          if(i.customId == "ayarlar_sunucu") await i.reply({embeds: [ new genEmbed().setDescription(`
+                          if(i.values[0] == "ayarlar_sunucu") await i.reply({embeds: [ new genEmbed().setDescription(`
   \`\`\`fix
   Genel Sunucu Ayarları (Rol & Kanal & Diğer) \`\`\`
 \` ••❯ \` **Doğru Kullanım!** \`${sistem.botSettings.Prefixs[0]}setup <[ayar ismi]> <[yeni ayar]>\`
 ${sunucu}`)], ephemeral: true})
-  if(i.customId == "ayarlar_register") await i.reply({embeds: [ new genEmbed().setDescription(`
+  if(i.values[0] == "ayarlar_register") await i.reply({embeds: [ new genEmbed().setDescription(`
 \`\`\`fix
 Kayıt Ayarlar (Rol & Kanal & Diğer)\`\`\`
 \` ••❯ \` **Doğru Kullanım!** \`${sistem.botSettings.Prefixs[0]}setup <[ayar ismi]> <[yeni ayar]>\`
 ${register}`)], ephemeral: true})
-if(i.customId == "ayarlar_limit") await i.reply({embeds: [ new genEmbed().setDescription(`
+if(i.values[0] == "ayarlar_limit") await i.reply({embeds: [ new genEmbed().setDescription(`
 \`\`\`fix
 Limit Ayarları\`\`\`
 \` ••❯ \` **Doğru Kullanım!** \`${sistem.botSettings.Prefixs[0]}setup <[ayar ismi]> <[yeni ayar]>\`
 ${limit}`)], ephemeral: true})
-if(i.customId == "ayarlar_role") await i.reply({embeds: [ new genEmbed().setDescription(`
+if(i.values[0] == "ayarlar_role") await i.reply({embeds: [ new genEmbed().setDescription(`
 \`\`\`fix
 Rol Ayarları\`\`\`
 \` ••❯ \` **Doğru Kullanım!** \`${sistem.botSettings.Prefixs[0]}setup <[ayar ismi]> <[yeni ayar]>\`
 ${role}`)], ephemeral: true})
-if(i.customId == "ayarlar_punitives") await i.reply({embeds: [ new genEmbed().setDescription(`
+if(i.values[0] == "ayarlar_punitives") await i.reply({embeds: [ new genEmbed().setDescription(`
 \`\`\`fix
 Ceza Ayarları (Rol & Kanal & Diğer)\`\`\`
 \` ••❯ \` **Doğru Kullanım!** \`${sistem.botSettings.Prefixs[0]}setup <[ayar ismi]> <[yeni ayar]>\`
 ${punitives}`)], ephemeral: true})
-if(i.customId == "ayarlar_channel") await i.reply({embeds: [ new genEmbed().setDescription(`
+if(i.values[0] == "ayarlar_channel") await i.reply({embeds: [ new genEmbed().setDescription(`
 \`\`\`fix
 Kanal Ayarları\`\`\`
 \` ••❯ \` **Doğru Kullanım!** \`${sistem.botSettings.Prefixs[0]}setup <[ayar ismi]> <[yeni ayar]>\`
 ${channel}`)], ephemeral: true})
-if(i.customId == "ayarlar_stat") await i.reply({embeds: [ new genEmbed().setDescription(`
+if(i.values[0] == "ayarlar_stat") await i.reply({embeds: [ new genEmbed().setDescription(`
 \`\`\`fix
 Diğer Ayarlar (Rol & Kanal & Diğer)\`\`\`
 \` ••❯ \` **Doğru Kullanım!** \`${sistem.botSettings.Prefixs[0]}setup <[ayar ismi]> <[yeni ayar]>\`

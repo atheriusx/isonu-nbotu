@@ -5,7 +5,7 @@ const getLimit = new Map();
 module.exports = {
     Isim: "reklam",
     Komut: ["ads","reklam-cezalandır"],
-    Kullanim: "reklam <@acar/ID>",
+    Kullanim: "reklam <@sehira/ID>",
     Aciklama: "Belirtilen üyeyi cezalandırır.",
     Kategori: "yetkili",
     Extend: true,
@@ -26,7 +26,7 @@ module.exports = {
   onRequest: async function (client, message, args) {
     if(!roller.jailHammer.some(oku => message.member.roles.cache.has(oku)) && !roller.üstYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.altYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.yönetimRolleri.some(oku => message.member.roles.cache.has(oku))  && !message.member.permissions.has('ADMINISTRATOR')) return message.channel.send(cevaplar.noyt)
     let uye = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@acar/ID>\``);
+    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@sehira/ID>\``);
     if(uye.user.bot) return message.channel.send(cevaplar.bot);
     if(message.author.id === uye.id) return message.channel.send(cevaplar.kendi);
     if(!uye.manageable) return message.channel.send(cevaplar.dokunulmaz);
@@ -34,13 +34,13 @@ module.exports = {
     let jailButton = new MessageButton()
     .setCustomId(`onayla`)
     .setLabel(await Jail.findById(uye.id) ? `Aktif Cezalandırılması Mevcut!` : getLimit.get(message.member.id) >= ayarlar.reklamLimit ? `Limit Doldu (${getLimit.get(message.member.id) || 0} / ${ayarlar.reklamLimit})` : 'İşlemi Onaylıyorum!')
-    .setEmoji(message.guild.emojiGöster(emojiler.Cezalandırıldı).id)
+    .setEmoji(message.guild.emojiGöster(emojiler.Cezalandırıldı))
     .setStyle('SUCCESS')
     .setDisabled(await Jail.findById(uye.id) ? true : getLimit.get(message.member.id) >= ayarlar.reklamLimit ? true : false )
     let iptalButton =  new MessageButton()
     .setCustomId(`iptal`)
     .setLabel('İşlemi İptal Et')
-    .setEmoji(message.guild.emojiGöster(emojiler.Iptal).id)
+    .setEmoji(message.guild.emojiGöster(emojiler.Iptal))
     .setStyle('DANGER')
     let jailOptions = new MessageActionRow().addComponents(
             jailButton,

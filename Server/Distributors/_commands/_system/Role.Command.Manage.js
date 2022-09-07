@@ -46,7 +46,7 @@ module.exports = {
         new MessageSelectMenu()
         .setCustomId("kullanacakRoller")
         .setPlaceholder("İzin verilecek rolleri seçin!")
-        .setMaxValues(5)
+        .setMaxValues(3)
         .setMinValues(1)
         .setOptions(
             rollPush.slice(0, 25)
@@ -96,7 +96,7 @@ module.exports = {
           mesaj.edit({components: [], content: null, embeds: [ new genEmbed().setFooter(`birden fazla rol etiketi veya rol idsi girebilirsiniz.`).setDescription(`${başHarfBüyült(komutPushlancak.Name)} komutunu ${role.map(x => message.guild.roles.cache.get(x)).join(", ")} rol(leri) verebilecek roller seçildi şimdi sırada vermek istediğiniz rolü yazın. (**10 Saniye**, iptal etmek için \`iptal\` yazın)`)]})
           await message.channel.awaitMessages({isimfilter, max: 1, time: 50000, errors: ["time"]})
           .then(async verilcekRole => {
-            let acarsiksinananı = verilcekRole.first()
+            let sehirasiksinananı = verilcekRole.first()
           if (verilcekRole.first().content == ("iptal" || "i")) {
             verilcekRole.first().delete();
             mesaj.delete();
@@ -104,16 +104,16 @@ module.exports = {
           };
  
           let rolPushing = []
-          if(acarsiksinananı.mentions.roles.size >= 1) {
-            rolPushing = acarsiksinananı.mentions.roles.map(role => role.id)
+          if(sehirasiksinananı.mentions.roles.size >= 1) {
+            rolPushing = sehirasiksinananı.mentions.roles.map(role => role.id)
           } else {
-            let argss = acarsiksinananı.content.split(" ");
+            let argss = sehirasiksinananı.content.split(" ");
             argss = argss.splice(0)
             let rolVerAbime = argss.filter(role => message.guild.roles.cache.some(role2 => role == role2.id))
             rolPushing.push(...rolVerAbime)
           }
           komutPushlancak.Roles = rolPushing
-          acarsiksinananı.delete();
+          sehirasiksinananı.delete();
           await TalentPerms.updateOne({guildID: message.guild.id}, { $push: {"talentPerms": komutPushlancak}}, {upsert: true}).exec()
           await mesaj.edit({components: [], embeds: [ new genEmbed().setDescription(`${message.guild.emojiGöster(emojiler.Onay)} **${başHarfBüyült(komutPushlancak.Name)}** (\`${sistem.botSettings.Prefixs.map(x => x).join(", ")} prefixlerine sahip!\`) isimli alt komut başarıyla \`${tarihsel(Date.now())}\` tarihinde oluşturuldu.`).setFooter(`bu komut sadece rol ver/al için kullanılır ve loglanır.`).addField(`Kullanacak rol(ler)`, `${komutPushlancak.Permission.map(x => message.guild.roles.cache.get(x)).join(",")}`, true).addField(`Verilecek rol(ler)`,`${rolPushing.map(x => message.guild.roles.cache.get(x)).join(", ")}`,true)]});
       
@@ -140,7 +140,7 @@ module.exports = {
       TalentPerm.filter(x => !Array.isArray(x.Commands)).forEach(x =>  komutlar.push(x.Commands))
       TalentPerm.filter(x => !Array.isArray(x.Commands)).forEach(data => {
         komutListe.push([
-          {label: başHarfBüyült(data.Commands), value: data.Commands, emoji: {id: message.guild.emojiGöster(emojiler.chatSusturuldu).id}, description: `${data.Roles.map(x => message.guild.roles.cache.get(x) ? message.guild.roles.cache.get(x).name : "@rol bulunamadı").join(", ")} veriyor.`},
+          {label: başHarfBüyült(data.Commands), value: data.Commands, emoji: {id: "901159554446946325"}, description: `${data.Roles.map(x => message.guild.roles.cache.get(x) ? message.guild.roles.cache.get(x).name : "@rol bulunamadı").join(", ")} veriyor.`},
         ])
       })
       if(komutListe.length <= 0) return message.channel.send({embeds: [new genEmbed().setColor("WHITE").setDescription(`${message.guild.emojiGöster(emojiler.sarıYıldız)} \`${message.guild.name}\` sunucusuna ait **${TalentPerm ? 0 : 0}** alt komut bulunmaktadır.`).setFooter(`komut eklemek için: ${sistem.botSettings.Prefixs[0]}talentperm <ekle>`)]})
@@ -165,7 +165,7 @@ module.exports = {
                 role.push(ids)
               }
               let komutBul = await TalentPerms.findOne({guildID: message.guild.id})
-              const findCmd = komutBul.talentPerms.find(acar => acar.Commands == i.values[0]);
+              const findCmd = komutBul.talentPerms.find(sehira => sehira.Commands == i.values[0]);
               await TalentPerms.updateOne({guildID: message.guild.id}, { $pull: { "talentPerms": findCmd } }, { upsert: true })
               msg.delete().catch(err => {})
               message.react(message.guild.emojiGöster(emojiler.Onay))

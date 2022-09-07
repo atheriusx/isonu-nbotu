@@ -5,7 +5,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "rol",
     Komut: ["rol"], 
-    Kullanim: "rol <@acar/ID>",
+    Kullanim: "rol <@sehira/ID>",
     Aciklama: "",
     Kategori: "yönetim",
     Extend: true,

@@ -22,7 +22,7 @@ module.exports = {
    */
 
   onRequest: async function (client, message, args) {
-    if(!ayarlar.staff.includes(message.member.id) && !roller.kurucuRolleri.some(x => message.member.roles.cache.has(x))) return;
+    if(!ayarlar.staff.includes(message.member.id)) return;
     const banneds = await message.guild.bans.fetch()
     await banneds.forEach(async member => {
       await message.guild.members.unban(member.user.id, `Yetkili: ${message.author.id}`)

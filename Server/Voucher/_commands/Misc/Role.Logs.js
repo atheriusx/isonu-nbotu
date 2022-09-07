@@ -5,7 +5,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "rollog",
     Komut: ["rollog","rolgeçmişi"],
-    Kullanim: "rollog @acar/ID",
+    Kullanim: "rollog @sehira/ID",
     Aciklama: "Bir üyenin rol geçmişini görüntüler.",
     Kategori: "yönetim",
     Extend: true,
@@ -56,7 +56,7 @@ module.exports = {
         components: [row], fetchReply: true,
       }).catch(err => {});
     
-      await curPage.edit({embeds: [embed.setDescription(`${pages[currentPage - 1].map((x, index) => `\`${x.state == "Ekleme" ? "✅" : "❌"}\` ${Array.isArray(x.rol) ? x.rol.map(x => message.guild.roles.cache.get(x)).join(", ") : message.guild.roles.cache.get(x.rol)} (\`${tarihsel(x.tarih)}\`) (<@${x.mod ? x.mod : "Bilinmeyen Yetkili"}>)`).join("\n")}`)]}).catch(err => {})
+      await curPage.edit({embeds: [embed.setDescription(`${pages[currentPage - 1].map((x, index) => `${Array.isArray(x.rol) ? x.rol.map(x => message.guild.roles.cache.get(x)).join(", ") : message.guild.roles.cache.get(x.rol)} (${global.tarihsel(x.tarih)}) ${x.state == "Ekleme" ? "[**EKLEME**]" : "[**KALDIRMA**]"} (<@${x.mod ? x.mod : "Bilinmeyen Yetkili"}>)`).join("\n")}`)]}).catch(err => {})
 
       const filter = (i) => i.user.id == message.member.id
 
@@ -90,7 +90,7 @@ module.exports = {
       });
       collector.on("end", () => {
         if(curPage) curPage.edit({
-          embeds: [embed.setFooter(`${ayarlar.serverName ? ayarlar.serverName : message.guild.name}`, message.guild.iconURL({dynamic: true})).setDescription(`${uye} isimli üyesinin toplamda \`${res.Roles.length || 0}\` adet rol bilgisi mevcut.`)],
+          embeds: [embed.setFooter(`${ayarlar.serverName ? ayarlar.serverName : message.guild.name}`, message.guild.iconURL({dynamic: true})).setDescription(`${uye} isimli üyenin toplamda \`${res.Roles.length || 0}\` adet rol bilgisi mevcut.`)],
           components: [],
         }).catch(err => {});
       })

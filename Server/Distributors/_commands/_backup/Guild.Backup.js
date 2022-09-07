@@ -4,7 +4,7 @@ const { guildBackup } = require('../../../../Global/Init/Guild.Backup');
 module.exports = {
     Isim: "backup",
     Komut: ["yedekal"],
-    Kullanim: "yedek @acar/ID",
+    Kullanim: "yedek @sehira/ID",
     Aciklama: "Sunucudaki üyeler içerisinde tagı olmayanları kayıtsıza at.",
     Kategori: "-",
     Extend: false,

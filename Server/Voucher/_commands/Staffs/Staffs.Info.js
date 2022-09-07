@@ -4,7 +4,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "yetkililerim",
     Komut: ["yetkililerim","yetkilibilgisi"],
-    Kullanim: "yetkilibilgisi <@acar/ID>",
+    Kullanim: "yetkilibilgisi <@sehira/ID>",
     Aciklama: "Belirlenen veya komutu kullanan kişi belirlediği yetkili sayısını ve en son belirlediği yetkili sayısını gösterir.",
     Kategori: "stat",
     Extend: true,

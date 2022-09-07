@@ -4,7 +4,7 @@ const Users = require('../../../../Global/Databases/Schemas/Client.Users');
 module.exports = {
   Isim: "komutdenetim",
   Komut: ["komutkullanimi"],
-  Kullanim: "komutdenetim @acar/ID",
+  Kullanim: "komutdenetim @sehira/ID",
   Aciklama: "Bir üyenin kullandığı komut geçmişini gösterir.",
   Kategori: "yönetim",
   Extend: true,

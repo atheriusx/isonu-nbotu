@@ -7,7 +7,7 @@ require('moment-timezone');
 module.exports = {
     Isim: "yetkipuan",
     Komut: ["altyetkipuan","yetkipuanekle"],
-    Kullanim: "yetkipuan <@acar/ID> <Puan>",
+    Kullanim: "yetkipuan <@sehira/ID> <Puan>",
     Aciklama: "Belirlenen üyeyi terfi sistemine senkronize eder.",
     Kategori: "kurucu",
     Extend: false,
@@ -37,6 +37,11 @@ module.exports = {
     let yetkiKodu = parseInt(args[1]);
     if(isNaN(yetkiKodu)) return message.react(message.guild.emojiGöster(emojiler.Iptal))
     await client.Upstaffs.addPoint(uye.id, yetkiKodu, "Bonus")
+    message.send.channel({embeds: [new genEmbed().setColor("DARK_GOLD").setDescription(`${message.guild.emojiGöster(emojiler.Icon)} ${uye} isimli kişiye vermek istediğiniz puanı belirtin. İşlemi iptal etmek için (**iptal**) yazabilirsiniz. (**Süre**: \`30 Saniye\`)`)],components: []})
+    var isimfilter = m => m.author.id == message.member.id
+    let col = msg.channel.createMessageCollector({filter: isimfilter, time: 30000, max: 1, errors: ["time"]})
+
+
     message.guild.kanalBul("terfi-log").send({embeds: [embed.setDescription(`${message.member} (\`${message.member.id}\`) isimli yönetici ${uye} (\`${uye.id}\`) isimli üyeye \`${yetkiKodu}\` yetki bonusu ekledi.`)]});
     message.react(message.guild.emojiGöster(emojiler.Onay))
   }

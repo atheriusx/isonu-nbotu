@@ -5,6 +5,7 @@ const VMutes = require('../../../../Global/Databases/Schemas/Punitives.Vmutes');
 const Mutes = require('../../../../Global/Databases/Schemas/Punitives.Mutes');
 const Forcebans = require('../../../../Global/Databases/Schemas/Punitives.Forcebans');
 const Settings = require('../../../../Global/Databases/Schemas/Global.Guild.Settings');
+const Punitives = require('../../../../Global/Databases/Schemas/Global.Punitives')
 const { genEmbed } = require('../../../../Global/Init/Embed');
 const getInvite = new Collection()
 
@@ -17,6 +18,7 @@ module.exports = async (member) => {
     let User = await Users.findOne({ _id: member.id }) 
     let Jail = await Jails.findOne({ _id: member.id });
     let Forceban = await Forcebans.findOne({ _id: member.id });
+    let Underworld =  await Punitives.findOne({Member: member.id, Type: "Underworld", Active: true})
     const _findServer = await Settings.findOne({ guildID: sistem.SERVER.ID })
     const _set = global._set = _findServer.Ayarlar
     let OneWeak = Date.now()-member.user.createdTimestamp <= 1000*60*60*24*7;
@@ -40,6 +42,10 @@ module.exports = async (member) => {
     if(Jail) {
         await member.setRoles(_set.jailRolü)
         return member.guild.channels.cache.get(_set.hoşgeldinKanalı).send(`${member} isimli üye sunucumuza katıldı, fakat aktif bir cezalandırılması bulunduğu için tekrardan cezalandırıldı. Adalet Mülkün Temelidir!`);
+    };
+    if(Underworld) {
+      await member.setRoles(_set.underworldRolü)
+      return member.guild.channels.cache.get(_set.hoşgeldinKanalı).send(`${member} isimli üye sunucumuza katıldı, fakat aktif bir Underworld cezası bulunduğu için tekrardan Underworld'e gönderildi.`);
     };
     if(Forceban) {
         await member.ban({ reason: 'Forceban tarafından yasaklandı.' })
@@ -109,6 +115,8 @@ async function hoşgeldinMesajı(member) {
     const cacheInvites = new Collection();
     invites.map((inv) => { cacheInvites.set(inv.code, { code: inv.code, uses: inv.uses, inviter: inv.inviter }); });
     getInvite.set(member.guild.id, cacheInvites);
+    let odalar = sistem.WELCOME_CHANNELS
+    let sesodaları = odalar[Math.floor(Math.random() * odalar.length)]
     let davettaslak;
     if (invite === null) {
         davettaslak = _set.serverName ? _set.serverName : member.guild.name
@@ -123,15 +131,15 @@ async function hoşgeldinMesajı(member) {
       }
       let hoşgeldinKanal = member.guild.channels.cache.get(_set.hoşgeldinKanalı) || member.guild.kanalBul(_set.hoşgeldinKanalı)
       
-      if(hoşgeldinKanal) hoşgeldinKanal.send(`${_set.serverName ? `${_set.serverName}` : member.guild.name}'a Hoş geldin ${member} biz de seni bekliyorduk, hesabın __${global.tarihsel(member.user.createdAt)}__ tarihinde ${global.tarihHesapla(member.user.createdAt)} oluşturulmuş!
-      
-${member.guild.emojiGöster(emojiler.Konfeti)} Sunucumuza ${davettaslak} üyesinin davetiyle katıldın ve seninle birlikte ailemiz **${global.sayılıEmoji(member.guild.memberCount)}** kişi oldu!
+      if(hoşgeldinKanal) hoşgeldinKanal.send(`${_set.serverName ? `${_set.serverName}` : member.guild.name}'e Hoş geldin ${member} biz de seni bekliyorduk. 
+Seninle birlikte sunucumuz **${global.sayılıEmoji(member.guild.memberCount)}** üye sayısına ulaştı. ${member.guild.emojiGöster(emojiler.Konfeti)}
 
-${member.guild.emojiGöster(emojiler.sarıYıldız)} Sunucu kurallarımız ${_set.kurallarKanalı ? `<#${_set.kurallarKanalı}>` : member.guild.kanalBul("kurallar")} kanalında belirtilmiştir. Unutma sunucu içerisinde ki \`ceza-i işlemler\` kuralları okuduğunu varsayarak gerçekleştirilecek.
-${_set.taglıalım ? `
-Sunucumuz şu anlık yalnızca **taglı(${_set.tag})** üyelerimize açıktır. Tagımıza ulaşmak için herhangi bir kanala \`${global.sistem.botSettings.Prefixs[0]}tag\` yazabilirsiniz. :tada: :tada: :tada:
-` : `
-Tagımıza ulaşmak için herhangi bir kanala \`${global.sistem.botSettings.Prefixs[0]}tag\` yazman yeterlidir. Şimdiden iyi eğlenceler! :tada: :tada: :tada:`}`);
+Hesabın __${global.tarihsel(member.user.createdAt)}__ tarihinde (${global.timeTag(Date.parse(member.user.createdAt))}) oluşturulmuş!
+<#${sesodaları}> Kanalında kayıt olabilirsin. Kayıt işleminden sonra <#${ayarlar.kurallarKanalı}> kanalını okumayı unutma.
+
+Sunucumuza ${davettaslak} üyesinin davetiyle katıldın. Tagımızı alarak veya takviye basarak bize destek olabilirsin!
+${_set.taglıalım ? `Sunucumuz şu anlık yalnızca **taglı(${_set.tag})** üyelerimize açıktır. Tagımızı alarak içeri giriş sağlayabilirsin. :tada: :tada: :tada:
+` : `Tagımız \`${ayarlar.tag}\`. Şimdiden iyi eğlenceler! :tada: :tada: :tada:`}`);
 
   if(!hoşgeldinKanal) client.logger.log("Lütfen sunucu üzerinden hoşgeldin kanalını belirtin. Bir üye girdi fakat hoşgeldin mesajı atamadım.","error")
 }
@@ -139,7 +147,7 @@ Tagımıza ulaşmak için herhangi bir kanala \`${global.sistem.botSettings.Pref
 
 async function rolTanımlama(üye, rol) {
     let Mute = await Mutes.findOne({ _id: üye.id });
-    await üye.setRoles(rol).then(async (acar) => {
+    await üye.setRoles(rol).then(async (sehira) => {
     if(üye.user.username.includes(_set.tag)) await üye.roles.add(_set.tagRolü)
     if(Mute) await üye.roles.add(_set.muteRolü)
     })

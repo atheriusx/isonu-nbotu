@@ -23,7 +23,7 @@ module.exports = async (message) => {
     if (message.author.bot || !global.sistem.botSettings.Prefixs.some(x => message.content.startsWith(x)) || !message.channel || message.channel.type == "dm") return;
     let args = message.content.substring(global.sistem.botSettings.Prefixs.some(x => x.length)).split(" ");
     let komutcuklar = args[0].toLocaleLowerCase()
-    let acar = message.client;
+    let sehira = message.client;
     args = args.splice(1);
     let calistirici;
     let TalentPerms;
@@ -46,7 +46,7 @@ module.exports = async (message) => {
     if((kanallar.izinliKanallar && !kanallar.izinliKanallar.some(x => message.channel.id == x)) && !message.member.permissions.has('ADMINISTRATOR') && !ayarlar.staff.includes(message.member.id) && !["temizle","sil","snipe","afk","kilit"].some(x => komutcuklar == x) ) return;
     if(message.member.roles.cache.has(roller.jailRolü) || message.member.roles.cache.has(roller.şüpheliRolü) || message.member.roles.cache.has(roller.yasaklıTagRolü) || (roller.kayıtsızRolleri && roller.kayıtsızRolleri.some(rol => message.member.roles.cache.has(rol)))) return;
     
-    if(acar.commands.has(komutcuklar) || acar.aliases.has(komutcuklar) || TalentPerms) {
+    if(sehira.commands.has(komutcuklar) || sehira.aliases.has(komutcuklar) || TalentPerms) {
       if (!ayarlar.staff.includes(message.member.id) && !message.member.permissions.has('ADMINISTRATOR') && !message.member.roles.cache.has(roller.kurucuRolleri)) {
         let cBlock = await commandBlocks.findOne({_id: message.member.id })
         if(cBlock) return;
@@ -80,7 +80,7 @@ module.exports = async (message) => {
             var rolismi = TalentPerms.Name || "Belirsiz"
             let uye = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
             if((TalentPerms.Permission && TalentPerms.Permission.length && !TalentPerms.Permission.some((id) => message.member.roles.cache.has(id))) && !roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !message.member.permissions.has("ADMINISTRATOR")) return message.channel.send({embeds: [new genEmbed().setDescription(`${cevaplar.prefix} Bu komutu kullanabilmek için ${TalentPerms.Permission ? TalentPerms.Permission.map(x => message.guild.roles.cache.get(x)).join(", ") + " rollerine sahip olmalısın!": ""}`)]}); 
-            if (!uye) return message.channel.send({embeds: [new genEmbed().setDescription(`${cevaplar.prefix} ${TalentPerms.Roles.map(x => message.guild.roles.cache.get(x)).join(", ")} ${TalentPerms.Roles.length > 1 ? 'rollerini' : "rolü"} verebilmem için lütfen bir üyeyi etiketle __Örn:__ \`${sistem.botSettings.Prefixs[0]}${komutcuklar} @acar/ID\`!`)]}).then(x => setTimeout(() => { x.delete() }, 7500));
+            if (!uye) return message.channel.send({embeds: [new genEmbed().setDescription(`${cevaplar.prefix} ${TalentPerms.Roles.map(x => message.guild.roles.cache.get(x)).join(", ")} ${TalentPerms.Roles.length > 1 ? 'rollerini' : "rolü"} verebilmem için lütfen bir üyeyi etiketle __Örn:__ \`${sistem.botSettings.Prefixs[0]}${komutcuklar} @sehira/ID\`!`)]}).then(x => setTimeout(() => { x.delete() }, 7500));
             if (TalentPerms.Roles.some(role => uye.roles.cache.has(role))) {
               await Users.updateOne({ _id: uye.id }, { $push: { "Roles": { rol: TalentPerms.Roles, mod: message.author.id, tarih: Date.now(), state: "Kaldırma" } } }, { upsert: true }).exec() 
               TalentPerms.Roles.forEach(x => uye.roles.remove(x))
@@ -96,8 +96,8 @@ module.exports = async (message) => {
               message.guild.kanalBul("rol-ver-log").send({embeds: [embed.setDescription(`${uye} isimli üyeye **${tarihsel(Date.now())}** tarihinde ${message.author} tarafından ${TalentPerms.Roles.map(x => message.guild.roles.cache.get(x)).join(", ")} adlı ${TalentPerms.Roles.length > 1 ? 'rolleri' : "rol"} verildi.`)]})  
             }
           }
-          calistirici = acar.commands.get(komutcuklar) || acar.aliases.get(komutcuklar);
-          if(calistirici) calistirici.onRequest(acar, message, args);
+          calistirici = sehira.commands.get(komutcuklar) || sehira.aliases.get(komutcuklar);
+          if(calistirici) calistirici.onRequest(sehira, message, args);
       } catch (err) {
         message.channel.send({content: `Bu komut çalıştırılırken hata oluştu... \`\`\`${err}\`\`\` `}).then(x => { 
           client.logger.log(`${komutcuklar} isimli komut çalıştırılırken hata oluştu.`,"error")

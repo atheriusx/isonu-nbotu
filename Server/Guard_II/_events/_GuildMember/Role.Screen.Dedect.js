@@ -16,7 +16,7 @@ module.exports = async (oldPresence, newPresence) => {
     let Row = new MessageActionRow().addComponents(
         new MessageButton()
         .setCustomId('ver')
-        .setEmoji(newPresence.guild.emojiGöster(emojiler.Onay).id)
+        .setEmoji(newPresence.guild.emojiGöster(emojiler.Onay))
         .setLabel('Rolleri Geri Ver!')
         .setStyle("SECONDARY"),
     )

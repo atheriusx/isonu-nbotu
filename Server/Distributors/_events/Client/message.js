@@ -17,14 +17,14 @@ module.exports = async (message) => {
     if (!global.sistem.botSettings.Prefixs.some(x => message.content.startsWith(x)) || !message.channel || message.channel.type == "dm") return;
     let args = message.content.substring(global.sistem.botSettings.Prefixs.some(x => x.length)).split(" ");
     let komutcuklar = args[0].toLocaleLowerCase()
-    let acar = message.client;
+    let sehira = message.client;
     args = args.splice(1);
     let calistirici;
 
-    if(acar.commands.has(komutcuklar) || acar.aliases.has(komutcuklar)) {
+    if(sehira.commands.has(komutcuklar) || sehira.aliases.has(komutcuklar)) {
       if (!(ayarlar && ayarlar.staff && ayarlar.staff.includes(message.member.id)) && message.guild.ownerId != message.member.id && client.user.id != message.member.id ) return;
-          calistirici = acar.commands.get(komutcuklar) || acar.aliases.get(komutcuklar);
-          if(calistirici) calistirici.onRequest(acar, message, args);
+          calistirici = sehira.commands.get(komutcuklar) || sehira.aliases.get(komutcuklar);
+          if(calistirici) calistirici.onRequest(sehira, message, args);
     } 
 
 };

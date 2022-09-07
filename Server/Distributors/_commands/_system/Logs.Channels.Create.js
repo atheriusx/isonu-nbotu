@@ -72,7 +72,7 @@ module.exports = {
                 .setStyle('SUCCESS'),
                 new MessageButton()
                 .setCustomId('iptal')
-                .setEmoji(message.guild.emojiGöster(emojiler.Iptal).id)
+                .setEmoji(message.guild.emojiGöster(emojiler.Iptal))
                 .setLabel('İşlemi İptal Et')
                 .setStyle('DANGER'),
             );

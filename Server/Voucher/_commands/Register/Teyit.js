@@ -4,7 +4,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "teyit",
     Komut: ["Teyit", "kayıtbilgi","kayıt-bilgi"],
-    Kullanim: "teyit <@acar/ID>",
+    Kullanim: "teyit <@sehira/ID>",
     Aciklama: "Belirtilen üye ve komutu kullanan üyenin teyit bilgilerini gösterir.",
     Kategori: "teyit",
     Extend: true,
@@ -24,8 +24,8 @@ module.exports = {
 
   onRequest: async function (client, message, args) {
     let uye = message.mentions.users.first() || message.guild.members.cache.get(args[0]) || message.member.user;
-    if (!uye) return message.channel.send(cevaplar.üyeyok);
-    if(!roller.teyitciRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !message.member.permissions.has('ADMINISTRATOR')) return message.channel.send(cevaplar.noyt);
+    if (!uye) return message.reply(cevaplar.üyeyok);
+    if(!roller.teyitciRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !message.member.permissions.has('ADMINISTRATOR')) return message.reply(cevaplar.noyt);
     let teyit = await Kullanici.findOne({ _id: uye.id }) || [];
     let teyitBilgisi;
     if(teyit.Records){
@@ -38,6 +38,6 @@ module.exports = {
     } else { 
       teyitBilgisi = `${uye} isimli üyenin teyit bilgisi bulunamadı.`
     }
-    message.channel.send({embeds: [new genEmbed().setAuthor(uye.tag, uye.avatarURL({dynamic: true})).setDescription(teyitBilgisi)]});
+    message.reply({embeds: [new genEmbed().setAuthor(uye.tag, uye.avatarURL({dynamic: true})).setDescription(teyitBilgisi)]});
     }
 };

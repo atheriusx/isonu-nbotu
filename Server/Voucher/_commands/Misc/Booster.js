@@ -52,7 +52,7 @@ module.exports = {
 	    setTimeout(() => {
 		    zaman.delete(message.author.id)
 	    }, 1000 * 60 * 15 * 1)
-      }).catch(acar =>  message.react(message.guild.emojiGöster(emojiler.Iptal)))
+      }).catch(sehira =>  message.react(message.guild.emojiGöster(emojiler.Iptal)))
     } else {
       message.react(message.guild.emojiGöster(emojiler.Iptal))
     }

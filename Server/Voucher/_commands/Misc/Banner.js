@@ -1,9 +1,9 @@
-const { Client, Message, MessageEmbed} = require("discord.js");
+const { Client, Message, MessageButton, MessageEmbed, MessageAttachment, MessageActionRow } = require("discord.js");
 const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "banner",
     Komut: ["arkaplan", "arkap" ],
-    Kullanim: "banner <@acar/ID>",
+    Kullanim: "banner <@sehira/ID>",
     Aciklama: "Belirtilen üyenin arka plan resmini büyültür.",
     Kategori: "diğer",
     Extend: true,
@@ -32,8 +32,14 @@ module.exports = {
     let avatar = victim.avatarURL({ dynamic: true, size: 2048 });
     embed
         .setAuthor(victim.tag, avatar)
-	    .setDescription(`[Arkaplan Resmi İçin TIKLA](${banner})`)
 	    .setImage(banner)
-    message.channel.send({embeds: [embed]});
+      let urlButton = new MessageButton()
+    .setURL(`${banner}`)
+    .setLabel(`Resim Adresi`)
+    .setStyle('LINK')    
+    let urlOptions = new MessageActionRow().addComponents(
+        urlButton
+    );
+    message.channel.send({embeds: [embed], components: [urlOptions]});
     }
 };

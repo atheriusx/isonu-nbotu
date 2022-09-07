@@ -4,7 +4,7 @@ const Punitives = require('../../../../Global/Databases/Schemas/Global.Punitives
 module.exports = {
     Isim: "uyarı",
     Komut: ["warn"],
-    Kullanim: "warn <@acar/ID>",
+    Kullanim: "warn <@sehira/ID>",
     Aciklama: "Belirlenen üyeyi ceza şeklinde uyarır ve cezalarına işler.",
     Kategori: "yönetim",
     Extend: true,
@@ -25,7 +25,7 @@ module.exports = {
   onRequest: async function (client, message, args) {
         if(!roller.warnHammer.some(oku => message.member.roles.cache.has(oku)) && !roller.üstYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.altYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.yönetimRolleri.some(oku => message.member.roles.cache.has(oku))  && !message.member.permissions.has('ADMINISTRATOR')) return message.channel.send(cevaplar.noyt);
         let uye = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-        if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@acar/ID> <Sebep>\``);
+        if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@sehira/ID> <Sebep>\``);
         if(message.author.id === uye.id) return message.channel.send(cevaplar.kendi);
         if(!uye && message.member.roles.highest.position <= uye.roles.highest.position) return message.channel.send(cevaplar.yetkiust);
         let sebep = args.splice(1).join(" ");

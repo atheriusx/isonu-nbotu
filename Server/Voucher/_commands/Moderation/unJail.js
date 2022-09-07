@@ -6,7 +6,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "unjail",
     Komut: ["cezalıçıkart", "cezalıçıkart"],
-    Kullanim: "unjail <#No/@acar/ID>",
+    Kullanim: "unjail <#No/@sehira/ID>",
     Aciklama: "Belirlenen üyeyi cezalıdan çıkartır.",
     Kategori: "yetkili",
     Extend: true,
@@ -32,7 +32,7 @@ module.exports = {
       if(cezanobul) args[0] = cezanobul._id
     }
     let uye = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <#No/@acar/ID>\``);
+    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <#No/@sehira/ID>\``);
     if(uye.user.bot) return message.channel.send(cevaplar.bot);
     if(message.author.id === uye.id) return message.channel.send(cevaplar.kendi);
     if(!uye.manageable) return message.channel.send(cevaplar.dokunulmaz);
@@ -71,7 +71,7 @@ module.exports = {
     await message.channel.send(`${message.guild.emojiGöster(emojiler.Onay)} ${uye} üyesinin (\`#${cezakontrol.No}\`) ceza numaralı cezalandırılması kaldırıldı!`).then(x => {setTimeout(() => {
         x.delete()
     }, 10750)});;;
-    if(uye) uye.send({embeds: [new genEmbed().setDescription(`${message.author} tarafından **${tarihsel(Date.now())}** tarihinde \`#${cezakontrol.No}\` ceza numaralı cezalandırılması kaldırıldı!`)]}).catch(x => {
+    if(uye) uye.send({content: `Merhaba ${uye}, ${message.author} adlı yetkili tarafından **${tarihsel(Date.now())}** tarihinde \`#${cezakontrol.No}\` ceza numaralı cezalandırılması kaldırıldı!`}).catch(x => {
       
     });
     let findChannel = message.guild.kanalBul("jail-log")

@@ -5,8 +5,8 @@ const Forcebans = require('../../../../Global/Databases/Schemas/Punitives.Forceb
 const { genEmbed } = require('../../../../Global/Init/Embed');
 module.exports = {
     Isim: "kalkmazban-kaldır",
-    Komut: ["acarban-kaldır", "unforceban"],
-    Kullanim: "kalkmazban-kaldır <@acar/ID>",
+    Komut: ["sehiraban-kaldır", "unforceban"],
+    Kullanim: "kalkmazban-kaldır <@sehira/ID>",
     Aciklama: "Belirlenen üyeyi sunucudan uzaklaştırır.",
     Kategori: "kurucu",
     Extend: true,

@@ -6,7 +6,7 @@ const guildSettings = require('../../../../Global/Databases/Schemas/Global.Guild
 module.exports = {
     Isim: "rolsil",
     Komut: ["rolsil"],
-    Kullanim: "rolsil @acar/ID",
+    Kullanim: "rolsil @sehira/ID",
     Aciklama: "Sunucudaki üyeler içerisinde tagı olmayanları kayıtsıza at.",
     Kategori: "-",
     Extend: false,

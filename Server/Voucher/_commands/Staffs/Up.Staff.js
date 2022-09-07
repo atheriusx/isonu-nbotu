@@ -9,7 +9,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "yükselt",
     Komut: ["yukselt"],
-    Kullanim: "yükselt <@acar/ID>",
+    Kullanim: "yükselt <@sehira/ID>",
     Aciklama: "Belirlenen yetkilinin sunucu içerisinde ki bilgileri gösterir ve yükseltir düşürür.",
     Kategori: "stat",
     Extend: true,

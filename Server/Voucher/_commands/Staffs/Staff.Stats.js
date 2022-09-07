@@ -12,7 +12,7 @@ require('moment-timezone');
 module.exports = {
     Isim: "terfi",
     Komut: ["yetkim","ystat","yetkilistat","görev","görevim","görevlerim","tasks","task"],
-    Kullanim: "yetkim <@acar/ID>",
+    Kullanim: "yetkim <@sehira/ID>",
     Aciklama: "Belirlenen üye veya kullanan üye eğer ki yetkiliyse onun yetki atlama bilgilerini gösterir.",
     Kategori: "stat",
     Extend: true,
@@ -22,7 +22,7 @@ module.exports = {
    */
   onLoad: function (client) {
     client.saatDakikaCevir = (date) => { return moment.duration(date).format('H [saat,] m [dakika]'); };
-    client.acarSaatYap = (date) => { return moment.duration(date).format('H'); };
+    client.sehiraSaatYap = (date) => { return moment.duration(date).format('H'); };
   },
 
    /**
@@ -32,6 +32,20 @@ module.exports = {
    */
 
   onRequest: async function (client, message, args) {
+// icon
+let icon = [
+{id: "iconmor", "icon": "iconmor"},
+            {id: "icon", iconmavi: "iconmavi"},
+            {id: "icon", iconyesi: "iconyesil"},
+            {id: "icon", iconpink: "iconpink"},
+
+    ]
+    let iconcuk = icon.shuffle()[0]
+
+    
+            //
+
+
     if(!_statSystem.system) return; 
     let kullArray = message.content.split(" ");
     let kullaniciId = kullArray.slice(1);
@@ -119,21 +133,20 @@ module.exports = {
                 if(key == _statSystem.generalChatCategory) simdimesaj = `${message.guild.emojiGöster(emojiler.Terfi.miniicon)} ${message.guild.channels.cache.has(key) ? 'Chat Puan' ? 'Chat Puan' : message.guild.channels.cache.get(key).name : '#Silinmiş'}: \`${value} mesaj (Puan Etkisi: +${puanBilgisi ? puanBilgisi.Mesaj.toFixed(1) : 0})\``
             });
         } 
-         let embed = new genEmbed().setAuthor(uye.user.tag, uye.user.avatarURL({dynamic: true, size: 2048})).setThumbnail(uye.user.avatarURL({dynamic: true, size: 2048})).setDescription(`${uye} (${uye.roles.highest}) kullanıcısının yetki yükseltim bilgileri aşağıda belirtilmiştir.`)
+         let embed = new genEmbed().setDescription(`Merhaba, ${uye} (${uye.roles.highest}) kullanıcısının yetki yükseltim bilgileri aşağıda verilmiştir.`)
         .addFields(
-            { name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Puan Durumu`, value: `Puanınız: \`${puanBilgisi.Point.toFixed(1)}\` Gereken Puan: \`${Number(puanBelirt-puanBilgisi.Point).toFixed(1)}\`\n${puanBari}`},
-            { name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Puan Detayları`, value: `${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Kayıtlar: \`${teyitoku ? teyitoku.Records ? teyitoku.Records.length : 0 : 0} adet (Puan Etkisi: +${puanBilgisi ? puanBilgisi.Register : 0})\`
-${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Taglılar: \`${taglıÇek} adet (Puan Etkisi: +${puanBilgisi ? puanBilgisi.Tag : 0})\`
+            { name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Puan Bilgisi`, value: `${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Kayıtlar: \`${teyitoku ? teyitoku.Records ? teyitoku.Records.length : 0 : 0} adet (Puan Etkisi: +${puanBilgisi ? puanBilgisi.Register : 0})\`
+${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Taglılar: \`${taglıÇek} adet (Puan Etkisi: +${puanBilgisi ? puanBilgisi.Tag : 0})\` 
 ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Davetler: \`${davetbilgisi ? davetbilgisi.total ? davetbilgisi.total : 0 : 0} (Puan Etkisi: +${puanBilgisi ? puanBilgisi.Invite : 0})\`
 ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Bonus: \`${puanBilgisi ? puanBilgisi.Bonus : 0} (Puan Etkisi: +${puanBilgisi ? puanBilgisi.Bonus : 0})\`
 ${simdimesaj}
 ${simdises}`},
-{ name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Yetki Durumu`, value: yetkidurumu }
+{ name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Yetki Durumu`, value: yetkidurumu },
+{ name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Puan Durumu`, value: `Puanınız: \`${puanBilgisi.Point.toFixed(1)}\` Gereken Puan: \`${Number(puanBelirt-puanBilgisi.Point).toFixed(1)}\`\n${puanBari}`}
         )
         
 
-        let genelpuandurumu = new genEmbed().setAuthor(uye.user.tag, uye.user.avatarURL({dynamic: true, size: 2048})).setThumbnail(uye.user.avatarURL({dynamic: true, size: 2048})).setDescription(`${uye} (${uye.roles.highest}) kullanıcısının \`${tarihsel(puanBilgisi.Baslama)}\` tarihinden itibaren kazandığı toplam puanlar ve detayları aşağıda belirtilmiştir.`).addFields(
-            { name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Genel Puan Durumu`, value: `Toplam Puanınız: \`${puanBilgisi.ToplamPuan.toFixed(1)}\` Toplam Kalan Puan: \`${Number(ToplamPuan-puanBilgisi.ToplamPuan).toFixed(1)}\`\n${genelpuanBari}`},
+        let genelpuandurumu = new genEmbed().setDescription(`Merhaba, ${uye} (${uye.roles.highest}) kullanıcısının \`${tarihsel(puanBilgisi.Baslama)}\` tarihinden itibaren kazandığı toplam puanlar ve detayları aşağıda verilmiştir.`).addFields(
             { name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Genel Puan Detayları`, value: `${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Kayıt: \`${teyitbilgi}\`
 ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Taglı: \`+${taglıÇek*_statSystem.points.tagged} Puan\`
 ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Davet: \`+${davetbilgisi ? davetbilgisi.total ? davetbilgisi.total : 0 : 0*_statSystem.points.invite} Puan\`
@@ -142,26 +155,33 @@ ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Toplam Bonus: \`+${puanBi
 ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Toplam Ses: \`+${puanBilgisi ? puanBilgisi.ToplamSes.toFixed(1) : 0} Puan\`
 ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Toplam Mesaj: \`+${puanBilgisi ? puanBilgisi.ToplamMesaj.toFixed(1) : 0} Puan\``},
 { name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Genel Ses Detayı`, value: `${siralases ? siralases : `${message.guild.emojiGöster(emojiler.Iptal)} Maalesef genel ses puan detayları bulunamadığından listelenemedi.`}`},
-{ name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Yetki Durumu`, value: `Şu an <@&${eskiRol.rol}> rolünden, son ${message.guild.roles.cache.get(_statSystem.endstaff) ? message.guild.roles.cache.get(_statSystem.endstaff) : "@Rol Bulunamadı."} rolüne ulaşabilmek için \`${Number(ToplamPuan-puanBilgisi.ToplamPuan).toFixed(1)}\` puan kazanmanız gerekiyor, şuan da \`%${Math.floor((puanBilgisi.ToplamPuan)/ToplamPuan*100)}\` oranında tamamladınız.`}
+{ name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Yetki Durumu`, value: `Şu an <@&${eskiRol.rol}> rolünden, son ${message.guild.roles.cache.get(_statSystem.endstaff) ? message.guild.roles.cache.get(_statSystem.endstaff) : "@Rol Bulunamadı."} rolüne ulaşabilmek için \`${Number(ToplamPuan-puanBilgisi.ToplamPuan).toFixed(1)}\` puan kazanmanız gerekiyor, şuan da \`%${Math.floor((puanBilgisi.ToplamPuan)/ToplamPuan*100)}\` oranında tamamladınız.`},
+{ name: `${message.guild.emojiGöster(emojiler.Terfi.icon)} Genel Puan Durumu`, value: `Toplam Puanınız: \`${puanBilgisi.ToplamPuan.toFixed(1)}\` Toplam Kalan Puan: \`${Number(ToplamPuan-puanBilgisi.ToplamPuan).toFixed(1)}\`\n${genelpuanBari}`},
+
       )
 
     const button1 = new MessageButton()
       .setCustomId('buttonana')
       .setLabel('Puan Detayları')
-      .setEmoji(message.guild.emojiGöster(emojiler.Terfi.icon).id)
+      .setEmoji(message.guild.emojiGöster(iconcuk.icon))
       .setStyle('PRIMARY');
     const button2 = new MessageButton()
       .setCustomId('buttongenel')
       .setLabel('Genel Puan Detayları')
-      .setEmoji(message.guild.emojiGöster(emojiler.Icon).id)
+      .setEmoji(message.guild.emojiGöster(emojiler.Icon))
+      .setStyle('PRIMARY');
+      const buttonss = new MessageButton()
+      .setCustomId('yetkipanel')
+      .setLabel('Yükseltim Paneli')
+      .setEmoji(message.guild.emojiGöster(emojiler.uyeEmojiID))
       .setStyle('SUCCESS');
     const buttonkapat = new MessageButton()
       .setCustomId('buttoniptal')
       .setLabel('Kapat')
-      .setEmoji(message.guild.emojiGöster(emojiler.Iptal).id)
+      .setEmoji(message.guild.emojiGöster(emojiler.Iptal))
       .setStyle('DANGER');
 
-     let görevBul = await Tasks.findOne({ roleID: eskiRol ? eskiRol.rol : uye.roles.hoist.id  }) || await Tasks.findOne({ Users: uye.id })
+      let görevBul = await Tasks.findOne({ roleID: eskiRol ? eskiRol.rol : uye.roles.hoist.id  }) || await Tasks.findOne({ Users: uye.id })
     let yönetimPaneli;
 
     if(görevBul) {
@@ -172,11 +192,11 @@ ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Toplam Mesaj: \`+${puanBi
       if(data) {
         data.taskVoiceStats.forEach(c => genelses += Number(c));
         data.taskVoiceStats.forEach((value, key) => {
-            if(key == kanallar.publicKategorisi) public += Number(client.acarSaatYap(value))
-            if(key == kanallar.streamerKategorisi) public += Number(client.acarSaatYap(value))
+            if(key == kanallar.publicKategorisi) public += Number(client.sehiraSaatYap(value))
+            if(key == kanallar.streamerKategorisi) public += Number(client.sehiraSaatYap(value))
         });
         data.taskVoiceStats.forEach((value, key) => {
-          if(key == kanallar.registerKategorisi) register += Number(client.acarSaatYap(value))
+          if(key == kanallar.registerKategorisi) register += Number(client.sehiraSaatYap(value))
         })
       };
     
@@ -190,7 +210,7 @@ if(görevBul.publicVoice >= 1 && görevBul.AllVoice >= 1) {
         if(!roller.teyitciRolleri.some(x => uye.roles.cache.has(x))) yönetimPaneli.addFields({ name: `${görevBul.publicVoice} Saat Public/Streamer Kanalında Takıl!`, value: `${public >= görevBul.publicVoice ? message.guild.emojiGöster(emojiler.Görev.OK) : message.guild.emojiGöster(emojiler.Görev.Ses) } ${yönetimBar(public ? public : 0, görevBul.publicVoice, 5, public)} \`${public >= görevBul.publicVoice ? `Tamamlandı!`: `${public} saat / ${görevBul.publicVoice} saat`}\``})
         if(roller.teyitciRolleri.some(x => uye.roles.cache.has(x))) yönetimPaneli.addFields({ name: `${görevBul.publicVoice} Saat Register Kanallarında Takıl!`, value: `${register >= görevBul.publicVoice ? message.guild.emojiGöster(emojiler.Görev.OK) : message.guild.emojiGöster(emojiler.Görev.Ses) } ${yönetimBar(register ? register : 0, görevBul.publicVoice, 5, register)} \`${register >= görevBul.publicVoice ? `Tamamlandı!`: `${register} saat / ${görevBul.publicVoice} saat`}\``})
         
-        yönetimPaneli.addFields({ name: `${görevBul.AllVoice} Saat Tüm Ses Kanallarında Takıl!`, value: `${Number(client.acarSaatYap(genelses)) >= görevBul.AllVoice ? message.guild.emojiGöster(emojiler.Görev.OK) : message.guild.emojiGöster(emojiler.Görev.Mesaj) } ${yönetimBar(Number(client.acarSaatYap(genelses)) ? Number(client.acarSaatYap(genelses)) : 0, görevBul.AllVoice, 5, Number(client.acarSaatYap(genelses)))} \`${Number(client.acarSaatYap(genelses)) >= görevBul.AllVoice ? `Tamamlandı!`: `${Number(client.acarSaatYap(genelses))} saat / ${görevBul.AllVoice} saat`}\``})
+        yönetimPaneli.addFields({ name: `${görevBul.AllVoice} Saat Tüm Ses Kanallarında Takıl!`, value: `${Number(client.sehiraSaatYap(genelses)) >= görevBul.AllVoice ? message.guild.emojiGöster(emojiler.Görev.OK) : message.guild.emojiGöster(emojiler.Görev.Mesaj) } ${yönetimBar(Number(client.sehiraSaatYap(genelses)) ? Number(client.sehiraSaatYap(genelses)) : 0, görevBul.AllVoice, 5, Number(client.sehiraSaatYap(genelses)))} \`${Number(client.sehiraSaatYap(genelses)) >= görevBul.AllVoice ? `Tamamlandı!`: `${Number(client.sehiraSaatYap(genelses))} saat / ${görevBul.AllVoice} saat`}\``})
        }
        if(roller.teyitciRolleri.some(x => uye.roles.cache.has(x)) && görevBul.Register >= 1) yönetimPaneli.addFields({ name: `${görevBul.Register} Kişiyi Kayıt Et!`, value: `${puanBilgisi.Mission.Register >= görevBul.Register ? message.guild.emojiGöster(emojiler.Görev.OK) : message.guild.emojiGöster(emojiler.Görev.Kek) } ${yönetimBar(puanBilgisi.Mission.Register ? puanBilgisi.Mission.Register : 0, görevBul.Register, 5, puanBilgisi.Mission.Register)} \`${puanBilgisi.Mission.Register >= görevBul.Register ? `Tamamlandı!`: `${puanBilgisi.Mission.Register} / ${görevBul.Register}`}\`` })
        if(görevBul.Invite >= 1) yönetimPaneli.addFields({ name: `${görevBul.Invite} Kişiyi Davet Et!`, value: `${puanBilgisi.Mission.Invite >= görevBul.Invite ? message.guild.emojiGöster(emojiler.Görev.OK) : message.guild.emojiGöster(emojiler.Görev.Kek) } ${yönetimBar(puanBilgisi.Mission.Invite ? puanBilgisi.Mission.Invite : 0, görevBul.Invite, 5, puanBilgisi.Mission.Invite)} \`${puanBilgisi.Mission.Invite >= görevBul.Invite ? `Tamamlandı!`: `${puanBilgisi.Mission.Invite} / ${görevBul.Invite}`}\`` })
@@ -202,7 +222,7 @@ if(görevBul.publicVoice >= 1 && görevBul.AllVoice >= 1) {
       }
 
     if(puanBilgisi && puanBilgisi.Yönetim) return await message.channel.send({embeds: [yönetimPaneli]})
-    let msg = await message.channel.send({ embeds: [embed],  components: [new MessageActionRow().addComponents([button1, button2, buttonkapat])] })
+    let msg = await message.channel.send({ embeds: [embed],  components: [new MessageActionRow().addComponents([button1, button2, buttonss, buttonkapat])] })
 
       var filter = (button) => button.user.id === message.member.id;
       let collector = await msg.createMessageComponentCollector({filter, time: 15000 })
@@ -216,6 +236,12 @@ if(görevBul.publicVoice >= 1 && görevBul.AllVoice >= 1) {
             msg.edit({embeds: [genelpuandurumu]})
             await button.deferUpdate()
         }
+        if (button.customId === "yetkipanel") {
+            msg.delete().catch(err => {})
+             let kom = client.commands.find(x => x.Isim == "yetki")
+                          kom.onRequest(client, message, args)
+                          await button.deferUpdate()
+        }
         if(button.customId === "buttoniptal") {
           msg.delete()
         }
@@ -226,27 +252,57 @@ if(görevBul.publicVoice >= 1 && görevBul.AllVoice >= 1) {
       });
 
         function progressBar(value, maxValue, size, veri) {
+          let gg = [
+            {id: "mavi", baslamaBar: "mavibas", doluBar: "maviorta", doluBitisBar: "mavison"},
+            {id: "red", baslamaBar: "redbas", doluBar: "redorta", doluBitisBar: "redson"},
+            {id: "sari", baslamaBar: "saribas", doluBar: "sariorta", doluBitisBar: "sarison"},
+            {id: "yesil", baslamaBar: "yesilbas", doluBar: "yesilorta", doluBitisBar: "yesilson"},
+            {id: "turkuaz", baslamaBar: "turkuazbas", doluBar: "turkuazorta", doluBitisBar: "turkuazson"},
+            {id: "standart", baslamaBar: "baslamaBar", doluBar: "doluBar", doluBitisBar: "doluBitisBar"},
+
+          ]
+          let barcik = gg.shuffle()[0]
+
+
+
             const progress = Math.round(size * ((value / maxValue) > 1 ? 1 : (value / maxValue)));
             const emptyProgress = size - progress > 0 ? size - progress : 0;
             let progressStart;
             if(veri == 0) progressStart = `${message.guild.emojiGöster(emojiler.Terfi.başlangıçBar)}`
-            if(veri > 0) progressStart = `${message.guild.emojiGöster(emojiler.Terfi.başlamaBar)}`
-            const progressText = `${message.guild.emojiGöster(emojiler.Terfi.doluBar)}`.repeat(progress);
+            if(veri > 0) progressStart = `${message.guild.emojiGöster(barcik.baslamaBar)}`
+            const progressText = `${message.guild.emojiGöster(barcik.doluBar)}`.repeat(progress);
             const emptyProgressText = `${message.guild.emojiGöster(emojiler.Terfi.boşBar)}`.repeat(emptyProgress)
-            const bar = progressStart + progressText + emptyProgressText + `${emptyProgress == 0 ? `${message.guild.emojiGöster(emojiler.Terfi.doluBitişBar)}` : `${message.guild.emojiGöster(emojiler.Terfi.boşBitişBar)}`}`;
+            const bar = progressStart + progressText + emptyProgressText + `${emptyProgress == 0 ? `${message.guild.emojiGöster(barcik.doluBitişBar)}` : `${message.guild.emojiGöster(emojiler.Terfi.boşBitişBar)}`}`;
             return bar;
         };
 
         function yönetimBar(value, maxValue, size, veri) {
+          let gg = [
+            // iconlar
+            {id: "iconmor", iconmor: "iconmor"},
+            {id: "iconmavi", iconmavi: "iconmavi"},
+            {id: "iconyesil", iconyesi: "iconyesil"},
+            {id: "iconpink", iconpink: "iconpink"},
+// barlar
+            {id: "mavi", baslamaBar: "mavibas", doluBar: "maviorta", doluBitisBar: "mavison"},
+            {id: "red", baslamaBar: "redbas", doluBar: "redorta", doluBitisBar: "redson"},
+            {id: "sari", baslamaBar: "saribas", doluBar: "sariorta", doluBitisBar: "sarison"},
+            {id: "yesil", baslamaBar: "yesilbas", doluBar: "yesilorta", doluBitisBar: "yesilson"},
+            {id: "turkuaz", baslamaBar: "turkuazbas", doluBar: "turkuazorta", doluBitisBar: "turkuazson"},
+            {id: "standart", baslamaBar: "baslamaBar", doluBar: "doluBar", doluBitisBar: "doluBitisBar"},
+
+          ]
+          let barcik = gg.shuffle()[0]
+
             if(veri < 0) value = 0
             const progress = Math.round(size * ((value / maxValue) > 1 ? 1 : (value / maxValue)));
             const emptyProgress = size - progress > 0 ? size - progress : 0;
             let progressStart;
             if(veri <= 0) progressStart = `${message.guild.emojiGöster(emojiler.Terfi.başlangıçBar)}`
-            if(veri > 0) progressStart = `${message.guild.emojiGöster(emojiler.Terfi.başlamaBar)}`
-            const progressText = `${message.guild.emojiGöster(emojiler.Terfi.doluBar)}`.repeat(progress);
+            if(veri > 0) progressStart = `${message.guild.emojiGöster(barcik.başlamaBar)}`
+            const progressText = `${message.guild.emojiGöster(barcik.doluBar)}`.repeat(progress);
             const emptyProgressText = `${message.guild.emojiGöster(emojiler.Terfi.boşBar)}`.repeat(emptyProgress)
-            const bar = progressStart + progressText + emptyProgressText + `${emptyProgress == 0 ? `${message.guild.emojiGöster(emojiler.Terfi.doluBitişBar)}` : `${message.guild.emojiGöster(emojiler.Terfi.boşBitişBar)}`}`;
+            const bar = progressStart + progressText + emptyProgressText + `${emptyProgress == 0 ? `${message.guild.emojiGöster(barcik.doluBitişBar)}` : `${message.guild.emojiGöster(emojiler.Terfi.boşBitişBar)}`}`;
             return bar;
         };
    });

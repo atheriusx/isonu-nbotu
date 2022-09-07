@@ -8,7 +8,7 @@ require('moment-timezone');
 module.exports = {
     Isim: "ysenk",
     Komut: ["yetkisenkronize","y"],
-    Kullanim: "y u <@acar/ID> <Yetki S.Kodu>",
+    Kullanim: "y u <@sehira/ID> <Yetki S.Kodu>",
     Aciklama: "Belirlenen üyeyi terfi sistemine senkronize eder.",
     Kategori: "-",
     Extend: true,
@@ -57,8 +57,8 @@ module.exports = {
         rol.members.forEach(async uye => {
           if (uye.user.bot) return;
             if (_statSystem.staffs.some(x => uye.roles.cache.has(x.rol))) {
-              let acar = _statSystem.staffs.find(x => uye.roles.cache.has(x.rol))
-	      let No = Number(acar.No)
+              let sehira = _statSystem.staffs.find(x => uye.roles.cache.has(x.rol))
+	      let No = Number(sehira.No)
           if(!uye.roles.cache.has(roller.altilkyetki)) await uye.roles.add(roller.altilkyetki);
               await Upstaffs.updateOne({ _id: uye.id }, { $set: { "staffNo": No + Number(1), "staffExNo": No, "Points": 0, "ToplamPuan": 0, "Baslama": Date.now() } }, {upsert: true}); 
               //message.channel.send(`${message.guild.emojiGöster(emojiler.Onay)} ${uye} kişisi \`${rol.name}\` yetkisine senkronize edildi.`);

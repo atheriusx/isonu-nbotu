@@ -4,7 +4,7 @@ const Kullanici = require('../../../../Global/Databases/Schemas/Client.Users')
 module.exports = {
     Isim: "tagsızat",
     Komut: ["tagsızkayıtsız"],
-    Kullanim: "tagsızat @acar/ID",
+    Kullanim: "tagsızat @sehira/ID",
     Aciklama: "Sunucudaki üyeler içerisinde tagı olmayanları kayıtsıza at.",
     Kategori: "kurucu",
     Extend: false,

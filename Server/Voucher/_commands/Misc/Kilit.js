@@ -3,7 +3,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
     Isim: "kilit",
     Komut: ["chatkilit", "kitle"],
-    Kullanim: "kilit @acar/ID",
+    Kullanim: "kilit @sehira/ID",
     Aciklama: "Komutun kullanıldığı metin kanalına yazmayı engeller.",
     Kategori: "yönetim",
     Extend: true,
@@ -26,10 +26,10 @@ module.exports = {
     let everyone = message.guild.roles.cache.find(a => a.name === "@everyone");
     if (message.channel.permissionsFor(everyone).has('SEND_MESSAGES')) {
       await message.channel.permissionOverwrites.edit(everyone.id, { SEND_MESSAGES: false });
-      await message.channel.send({ embeds: [embed.setDescription(`${message.guild.emojiGöster(emojiler.Iptal)} \`#${message.channel.name}\`  isimli metin kanalına yazmanız kapatıldı.`)] })
+      await message.channel.send({ content: `${message.guild.emojiGöster(emojiler.Iptal)} \`#${message.channel.name}\`  isimli metin kanalına yazmanız kapatıldı.`})
     } else {
       await message.channel.permissionOverwrites.edit(everyone.id, { SEND_MESSAGES: true });
-      await message.channel.send({ embeds: [embed.setDescription(`${message.guild.emojiGöster(emojiler.Onay)} \`#${message.channel.name}\`  isimli metin kanalına yazmanız açıldı.`)] });
+      await message.channel.send({ content: `${message.guild.emojiGöster(emojiler.Onay)} \`#${message.channel.name}\`  isimli metin kanalına yazmanız açıldı.`});
     };
 
     }

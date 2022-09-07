@@ -5,7 +5,7 @@ const moment = require('moment')
 module.exports = {
     Isim: "seskontrol",
     Komut: ["sesk", "n"],
-    Kullanim: "seskontrol @acar/ID",
+    Kullanim: "seskontrol @sehira/ID",
     Aciklama: "Belirlenen üyenin seste aktif veya haporleri ve kulaklığının açık veya kapalı olduğunu gösterir.",
     Kategori: "yönetim",
     Extend: true,
@@ -34,6 +34,9 @@ module.exports = {
    */
   onRequest: async (client, message, args) => {
     let embed = new genEmbed()
+    let kullArray = message.content.split(" ");
+    let kullaniciId = kullArray.slice(1);
+    let uye = message.mentions.members.first() || message.guild.members.cache.get(kullaniciId[0]) || message.guild.members.cache.find(x => x.user.username.toLowerCase() === kullaniciId.slice(0).join(" ") || x.user.username === kullaniciId[0]) || message.member;
     if(roller.üstYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) && roller.altYönetimRolleri.some(oku => message.member.roles.cache.has(oku)) && roller.yönetimRolleri.some(oku => message.member.roles.cache.has(oku)) && !roller.kurucuRolleri.some(oku => message.member.roles.cache.has(oku)) && !message.member.permissions.has('ADMINISTRATOR')) return message.channel.send(cevaplar.noyt); 
     let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if(!member) return message.react(message.guild.emojiGöster(emojiler.Iptal))
@@ -42,6 +45,9 @@ module.exports = {
             let limit = member.voice.channel.userLimit || "~";
             let mic = member.voice.selfMute ? `kapalı` : `açık`
             let kulak = member.voice.selfDeaf ? `kapalı` : `açık`
-            message.channel.send({ embeds: [embed.setDescription(`${member}, isimli üye <#${member.voice.channel.id}> (\`${member.voice.channel.members.size}/${limit}\` / \`${joinedAtData ? moment.duration(joinedAtData ? Date.now() - joinedAtData.date : 0).format("H [saat], m [dakika] s [saniye]") : "Süre bulunamadı"}\`) adlı ses kanalında bulunuyor ayrıca mikrofonu **${mic}**, kulaklığı **${kulak}**.`)] })
+            message.channel.send({ embeds: [embed
+              .setDescription(`${message.guild.emojiGöster(emojiler.Terfi.icon)} ${member}, isimli üye;
+            ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} <#${member.voice.channel.id}> (\`${member.voice.channel.members.size}/${limit}\` / \`${joinedAtData ? moment.duration(joinedAtData ? Date.now() - joinedAtData.date : 0).format("H [saat], m [dakika] s [saniye]") : "Süre bulunamadı"}\`) adlı ses kanalında bulunuyor.
+            ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Ayrıca mikrofonu **${mic}**, kulaklığı **${kulak}**.`)] });
     }
 };

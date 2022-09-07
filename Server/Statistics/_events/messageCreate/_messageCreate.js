@@ -30,7 +30,11 @@ client.on("messageCreate", async (message) => {
                 totalVoiceStats: 0,
                 chatStats: chatMap,
                 upstaffChatStats: chatMap,
-                totalChatStats: 1
+                totalChatStats: 1,
+                lastMessageSeen: Date.now(),
+                lastVoiceSeen: Date.now(),
+                lastSeen: Date.now(),
+
             });
             newMember.save() 
         } else {
@@ -39,6 +43,9 @@ client.on("messageCreate", async (message) => {
             data.chatStats.set(kanalID, Number(lastData)+1);
             if(_statSystem.system && _statSystem.staffs.some(x => message.member.roles.cache.has(x.rol))) data.upstaffChatStats.set(kanalID, Number(lastStaffData)+1);
             data.totalChatStats++;
+            data.lastMessageSeen = Date.now()
+            data.lastVoiceSeen = Date.now()
+            data.lastSeen = Date.now()
             data.save();
     };
   }); 

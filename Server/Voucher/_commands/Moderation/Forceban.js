@@ -5,8 +5,8 @@ const Forcebans = require('../../../../Global/Databases/Schemas/Punitives.Forceb
 const { genEmbed } = require('../../../../Global/Init/Embed');
 module.exports = {
     Isim: "kalkmazban",
-    Komut: ["acarban", "uzaoç","forceban"],
-    Kullanim: "kalkmazban <@acar/ID> <Sebep>",
+    Komut: ["sehiraban", "uzaoç","forceban"],
+    Kullanim: "kalkmazban <@sehira/ID> <Sebep>",
     Aciklama: "Belirlenen üyeyi sunucudan uzaklaştırır.",
     Kategori: "kurucu",
     Extend: true,
@@ -28,7 +28,7 @@ module.exports = {
     if(!ayarlar.staff.includes(message.member.id)) return message.channel.send(cevaplar.noyt)
     let uye = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || await client.getUser(args[0])
     let sunucudabul = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@acar/ID> <Sebep>\``);
+    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@sehira/ID> <Sebep>\``);
     if(message.author.id === uye.id) return message.channel.send(cevaplar.kendi);
     if(sunucudabul && sunucudabul.user.bot) return message.channel.send(cevaplar.bot);
     if(sunucudabul && message.member.roles.highest.position <= sunucudabul.roles.highest.position) return message.channel.send(cevaplar.yetkiust);
@@ -54,6 +54,7 @@ module.exports = {
             _id: uye.id,
         })
         await islem.save();
+        uye.send(`Merhaba ${uye}, **${ayarlar.serverName} sunucusun'dan ${message.member} adlı yetkili tarafından \`${sebep}\` nedeni ile kalıcı olarak yasaklandınız.`)
         let findedChannel = message.guild.kanalBul("forceban-log")
         if(findedChannel) findedChannel.send({embeds: [new genEmbed().setFooter(`${ayarlar.embedSettings.Footer ? `${ayarlar.embedSettings.Footer} •` : ''} Ceza Numarası: #${cezano}`,ayarlar.embedSettings.Footer ? undefined : uye.avatarURL({dynamic: true})).setDescription(`${uye.toString()} üyesine, **${tarihsel(Date.now())}** tarihinde \`${sebep}\` nedeniyle işlem uygulandı.`)]})
         await message.channel.send(`${message.guild.emojiGöster(emojiler.Yasaklandı)} ${uye.toString()} isimli üyeye \`${sebep}\` sebebiyle "__Kalkmaz(**BOT**) Yasaklama__" türünde ceza-i işlem uygulandı. (\`Ceza Numarası: #${cezano}\`)`)

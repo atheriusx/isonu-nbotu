@@ -4,7 +4,7 @@ const table = require('table')
 module.exports = {
     Isim: "cezalar",
     Komut: ["sicil"],
-    Kullanim: "cezalar <@acar/ID>",
+    Kullanim: "cezalar <@sehira/ID>",
     Aciklama: "Belirlenen üyenin bütün ceza verisini gösterir.",
     Kategori: "diğer",
     Extend: true,
@@ -24,7 +24,7 @@ module.exports = {
 
   onRequest: async function (client, message, args) {
     let uye = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || await client.getUser(args[0]);
-    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@acar/ID>\``);
+    if(!uye) return message.channel.send(cevaplar.üye + ` \`${sistem.botSettings.Prefixs[0]}${module.exports.Isim} <@sehira/ID>\``);
     await Punitives.find({Member: uye.id}).exec(async (err, res) => {
         if(err) return message.channel.send('Hata: `Bazı hatalar oluştu :(`').then(x => x.delete({timeout: 5000}));
         if(!await Punitives.findOne({Member: uye.id})) return message.channel.send(`${uye} kullanıcısının ceza bilgisi bulunmuyor.`).then(x => setTimeout(() => {x.delete()}, 7500));;
@@ -49,7 +49,7 @@ module.exports = {
             setTimeout(() => {
                 x.delete()
             }, 60000);
-        }).catch(acar => {
+        }).catch(sehira => {
             message.channel.send({content: `:no_entry_sign: <@${uye.id}> üyesinin cezaları **Discord API** sınırını geçtiği için metin belgesi hazırlayıp gönderdim, oradan cezaları kontrol edebilirsin.\nTekli bir cezaya bakmak için \`.ceza bilgi ID\` komutunu uygulayınız.`,     files: [{
                 attachment: Buffer.from(veriler),
                 name: `${uye.id}-cezalar.txt`

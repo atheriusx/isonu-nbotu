@@ -4,7 +4,7 @@ const { genEmbed } = require("../../../../Global/Init/Embed");
 module.exports = {
   Isim: "taglılar",
   Komut: ["taglılarım","taglıbilgisi"],
-  Kullanim: "taglıbilgisi <@acar/ID>",
+  Kullanim: "taglıbilgisi <@sehira/ID>",
   Aciklama: "Belirlenen veya komutu kullanan kişi belirlediği taglı sayısını ve en son belirlediği taglı sayısını gösterir.",
   Kategori: "stat",
   Extend: true,

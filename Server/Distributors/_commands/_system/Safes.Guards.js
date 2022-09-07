@@ -1,12 +1,14 @@
-const { Client, Message, Util, MessageActionRow, MessageButton, MessageSelectMenu} = require("discord.js");
-
-const GUARD_SETTINGS = require('../../../../Global/Databases/Schemas/Guards/Global.Guard.Settings');
+const { Client, Message, Util, Intents, MessageActionRow, MessageButton, MessageAttachment, MessageSelectMenu} = require("discord.js");
+const GUARDS_SETTINGS = require('../../../../Global/Databases/Schemas/Guards/Global.Guard.Settings')
+const GUARD_SETTINGS = require('../../../../Global/Databases/Schemas/Guards/Global.Guard.Settings')
+const GUILDS_SETTINGS = require('../../../../Global/Databases/Schemas/Global.Guild.Settings')
+const { genEmbed } = require('../../../../Global/Init/Embed')
 const ms = require('ms')
 const moment = require('moment')
-const { genEmbed } = require("../../../../Global/Init/Embed");
+let BOTS = global.allBots = client.allBots = []
 module.exports = {
     Isim: "güvenlik",
-    Komut: ["yarram", "guard-settings","guards","acarguard"],
+    Komut: ["yarram", "guard-settings","guards","sehiraguard", "guard"],
     Kullanim: "",
     Aciklama: "",
     Kategori: "-",
@@ -15,9 +17,52 @@ module.exports = {
    /**
    * @param {Client} client 
    */
-  onLoad: function (client) {
+  
+   onLoad: async function (client) {
+    let callbacks = require('../../../../Global/Settings/_system.json');
 
-  },
+    // Bot Token's
+let Req = callbacks.TOKENS.Requirements
+let Stat = callbacks.TOKENS.Statistics
+let Voucher = callbacks.TOKENS.Voucher
+let SEC_MAIN = callbacks.TOKENS.SECURITY.MAIN
+let SEC_ONE = callbacks.TOKENS.SECURITY.SEC_ONE
+let SEC_TWO = callbacks.TOKENS.SECURITY.SEC_TWO
+let SEC_THREE = callbacks.TOKENS.SECURITY.SEC_THREE
+let SEC_FOUR = callbacks.TOKENS.SECURITY.SEC_FOUR
+let DISTS = callbacks.TOKENS.SECURITY.DISTS
+let WELCOME = callbacks.WELCOMES
+    // Bot Token's
+
+let allTokens = [Req, Stat, Voucher, WELCOME, SEC_MAIN, SEC_ONE, SEC_TWO, SEC_THREE, SEC_FOUR, ...DISTS]
+allTokens.forEach(async (token) => {
+    let botClient;
+    if(callbacks.TOKENS.SECURITY.DISTS.includes(token)) {
+        botClient = new Client({
+            fetchAllMembers: true,
+            intents: [32767],
+            presence: { status: "invisible" },
+          }); 
+    } else {
+        botClient = new Client({
+            fetchAllMembers: true,
+            intents: [32767],
+            presence: {activities: [{name: sistem.botStatus.Name}], status: sistem.botStatus.Status}
+          });
+    }
+      botClient.on("ready", async () => {
+        let guardSettings = await GUARDS_SETTINGS.findOne({guildID: sistem.SERVER.ID})
+        if(!guardSettings) {
+            await GUARDS_SETTINGS.updateOne({guildID: sistem.SERVER.ID}, {$set: {"auditLimit": 10, auditInLimitTime: "2m"}}, {upsert: true})
+        } 
+        if(guardSettings.unManageable && !guardSettings.unManageable.includes(botClient.user.id)) await GUARDS_SETTINGS.updateOne({guildID: sistem.SERVER.ID}, {$push: {"unManageable": botClient.user.id} }, {upsert: true})
+        BOTS.push(botClient)
+      })
+      await botClient.login(token).catch(err => {
+      })
+})
+},
+
 
    /**
    * @param {Client} client 
@@ -37,7 +82,7 @@ ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Güvenlik Durumu: ${guard
 ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Dağıtıcı Durumu: \`2 Adet Self-Bot ve 4 Adet Bot\` bulunmaktadır.
 ${message.guild.emojiGöster(emojiler.Terfi.miniicon)} Tahmini Dağıtım Süresi: \`287 üye / 0.09dk\` olarak hesaplanmış
 **NOT:** Bu tahmini süre önceki dağıtımların ortalamasını almaktadır, son dağıtma \`${tarihsel(Date.now() - ms("5M"))}\` tarihinde olmuş ve \`142 üyeye 0.02dk\` dağıtmış. Ve bundan önce \`5+\` daha dağıtım olmuş.`,false)
-.addField("Nasıl Eklenir?", `Örn: \`${sistem.botSettings.Prefixs[0]}guards <@acar/@Rol/ID(Rol,Üye)> <${option.map(x => x).join(", ")}>\` komutu ile ekleyebilir/çıkartabilirsiniz.
+.addField("Nasıl Eklenir?", `Örn: \`${sistem.botSettings.Prefixs[0]}guards <@sehira/@Rol/ID(Rol,Üye)> <${option.map(x => x).join(", ")}>\` komutu ile ekleyebilir/çıkartabilirsiniz.
 
 \`\`\`fix
                  Güvenlik Listesindekiler\`\`\``)

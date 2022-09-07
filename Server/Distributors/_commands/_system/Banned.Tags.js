@@ -67,7 +67,7 @@ message.react(message.guild.emojiGöster(emojiler.Onay))
                     x.delete()
                 }, 7500);
             }),message.react(message.guild.emojiGöster(emojiler.Iptal))
-            const findUser = ayar.yasakTaglar.find(acar => acar == tags);
+            const findUser = ayar.yasakTaglar.find(sehira => sehira == tags);
             await GUILDS_SETTINGS.updateOne({ guildID: message.guild.id }, { $pull: { "Ayarlar.yasakTaglar": findUser } }, { upsert: true })
             let uyeler = message.guild.members.cache.filter(u => u.user.username.includes(tags))
             await message.channel.send({embeds: [embed.setDescription(`${message.guild.emojiGöster(emojiler.Onay)} Başarılı bir şekilde \`${tags}\` tagını yasaklı taglar listesinden çıkarttınız.
